@@ -108,11 +108,8 @@ export default function RegisterPage() {
               </svg>
             </div>
             <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Full-Stack Developer Technical Assignment</p>
-              <p className="text-sm font-medium text-gray-700">CRUD App With Auth + Filtering</p>
-              <p className="text-xs text-gray-500 mt-2">
-                A full-stack application demonstrating authentication, CRUD operations on related data models, and a frontend interface with filtering and search.
-              </p>
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Technical Assignment</p>
+              <p className="text-sm font-medium text-gray-700">Full-Stack CRUD App with Auth & Filtering</p>
             </div>
           </div>
         </div>
