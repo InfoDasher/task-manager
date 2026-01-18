@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,10 +36,11 @@ interface TasksResponse {
   };
 }
 
-export default function TasksPage() {
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("");
-  const [priority, setPriority] = useState("");
+function TasksContent() {
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [status, setStatus] = useState(searchParams.get("status") || "");
+  const [priority, setPriority] = useState(searchParams.get("priority") || "");
   const [page, setPage] = useState(1);
 
   const { data, isLoading, error } = useQuery<TasksResponse>({
@@ -182,5 +184,28 @@ export default function TasksPage() {
         </div>
       )}
     </div>
+  );
+}
+
+function TasksLoading() {
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900">Tasks</h1>
+        <p className="text-gray-600 mt-1">View and manage all your tasks across projects</p>
+      </div>
+      <div className="text-center py-12">
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
+        <p className="mt-4 text-gray-600">Loading...</p>
+      </div>
+    </div>
+  );
+}
+
+export default function TasksPage() {
+  return (
+    <Suspense fallback={<TasksLoading />}>
+      <TasksContent />
+    </Suspense>
   );
 }
