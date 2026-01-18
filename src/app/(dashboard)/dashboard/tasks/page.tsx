@@ -75,8 +75,8 @@ export default function TasksPage() {
       <Card>
         <CardContent className="pt-6">
           <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1">
-              <Input placeholder="Search tasks..." value={search} onChange={(e) => setSearch(e.target.value)} />
+            <div className="flex-1 min-w-0">
+              <Input placeholder="Search tasks..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full" />
             </div>
             <Select
               value={status}
