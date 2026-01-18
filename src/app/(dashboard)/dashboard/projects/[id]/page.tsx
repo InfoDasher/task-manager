@@ -237,29 +237,20 @@ export default function ProjectDetailPage() {
           </div>
         </CardHeader>
         <CardContent className="pt-4">
-          <div className="grid grid-cols-2 gap-3 text-sm text-gray-600 sm:grid-cols-4">
-            <div>
-              <span className="text-gray-500">Tasks</span>
-              <p className="font-semibold text-gray-900">{project.tasks.length}</p>
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-600">
+              <span className="text-gray-500">Tasks:</span>
+              <span className="ml-1 font-semibold text-gray-900">{project.tasks.length}</span>
             </div>
-            <div>
-              <span className="text-gray-500">Status</span>
-              <p className="font-semibold text-gray-900">{project.status.charAt(0) + project.status.slice(1).toLowerCase()}</p>
-            </div>
+            <Button onClick={() => setShowNewTask(true)}>Add Task</Button>
           </div>
         </CardContent>
       </Card>
 
-      {/* Tasks Section */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <div>
-            <CardTitle className="text-lg">Tasks</CardTitle>
-            <CardDescription>{project.tasks.length} total</CardDescription>
-          </div>
-          <Button onClick={() => setShowNewTask(true)}>Add Task</Button>
-        </CardHeader>
-      </Card>
+      {/* Tasks List Header */}
+      {project.tasks.length > 0 && (
+        <h3 className="text-lg font-semibold text-gray-900">Tasks</h3>
+      )}
 
       {/* New Task Form */}
       {showNewTask && (
