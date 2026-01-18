@@ -99,7 +99,7 @@ export default function RegisterPage() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       {/* Assignment Context */}
       <div className="mb-8 text-center max-w-md">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-500 to-violet-600 bg-clip-text text-transparent mb-3">TaskManager</h1>
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-500/90 to-violet-600/90 bg-clip-text text-transparent mb-3">TaskManager</h1>
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-left">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Full-Stack Developer Technical Assignment</p>
           <p className="text-sm font-medium text-gray-700">CRUD App With Auth + Filtering</p>
