@@ -143,6 +143,19 @@ export default function TaskDetailPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
+      {/* Breadcrumb Navigation */}
+      <nav className="flex items-center text-sm text-gray-500">
+        <Link href="/dashboard/projects" className="hover:text-blue-600">
+          Projects
+        </Link>
+        <span className="mx-2">/</span>
+        <Link href={`/dashboard/projects/${task.project.id}`} className="hover:text-blue-600">
+          {task.project.name}
+        </Link>
+        <span className="mx-2">/</span>
+        <span className="text-gray-900 font-medium">{task.title}</span>
+      </nav>
+
       <Card>
         <CardHeader>
           <div className="flex items-start justify-between">

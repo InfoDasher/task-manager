@@ -337,7 +337,7 @@ function TaskCard({ task, onDelete, isDeleting }: { task: Task; onDelete: () => 
           <div className="flex gap-2 ml-4">
             <Link href={`/dashboard/tasks/${task.id}`}>
               <Button variant="outline" size="sm">
-                Edit
+                View
               </Button>
             </Link>
             <Button variant="destructive" size="sm" onClick={onDelete} isLoading={isDeleting}>
