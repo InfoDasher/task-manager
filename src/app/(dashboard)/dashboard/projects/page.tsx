@@ -71,8 +71,10 @@ export default function ProjectsPage() {
       {/* Filters */}
       <Card>
         <CardContent className="pt-6">
-          <form onSubmit={handleSearch} className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_12rem_auto]">
-            <Input placeholder="Search projects..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full" />
+          <form onSubmit={handleSearch} className="grid gap-3 sm:grid-cols-[minmax(280px,1fr)_12rem_auto]">
+            <div className="min-w-[240px]">
+              <Input placeholder="Search projects..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full" />
+            </div>
             <Select
               value={status}
               onChange={(e) => {

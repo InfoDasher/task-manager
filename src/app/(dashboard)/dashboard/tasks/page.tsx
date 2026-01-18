@@ -74,8 +74,10 @@ export default function TasksPage() {
       {/* Filters */}
       <Card>
         <CardContent className="pt-6">
-          <form onSubmit={handleSearch} className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_10rem_10rem_auto]">
-            <Input placeholder="Search tasks..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full" />
+          <form onSubmit={handleSearch} className="grid gap-3 sm:grid-cols-[minmax(280px,1fr)_10rem_10rem_auto]">
+            <div className="min-w-[240px]">
+              <Input placeholder="Search tasks..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full" />
+            </div>
             <Select
               value={status}
               onChange={(e) => {
