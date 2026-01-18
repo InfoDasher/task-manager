@@ -71,10 +71,8 @@ export default function ProjectsPage() {
       {/* Filters */}
       <Card>
         <CardContent className="pt-6">
-          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1 min-w-0">
-              <Input placeholder="Search projects..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full" />
-            </div>
+          <form onSubmit={handleSearch} className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_12rem_auto]">
+            <Input placeholder="Search projects..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full" />
             <Select
               value={status}
               onChange={(e) => {
@@ -87,9 +85,9 @@ export default function ProjectsPage() {
                 { value: "COMPLETED", label: "Completed" },
               ]}
               placeholder="All Statuses"
-              className="w-full sm:w-48"
+              className="w-full"
             />
-            <Button type="submit" variant="outline">
+            <Button type="submit" variant="outline" className="w-full sm:w-auto">
               Search
             </Button>
           </form>
