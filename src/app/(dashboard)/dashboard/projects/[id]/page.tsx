@@ -248,9 +248,7 @@ export default function ProjectDetailPage() {
       </Card>
 
       {/* Tasks List Header */}
-      {project.tasks.length > 0 && (
-        <h3 className="text-lg font-semibold text-gray-900">Tasks</h3>
-      )}
+      {project.tasks.length > 0 && <h3 className="text-lg font-semibold text-gray-900">Tasks</h3>}
 
       {/* New Task Form */}
       {showNewTask && (
