@@ -2,7 +2,7 @@
 
 A modern, full-stack task management application built with Next.js 14, Prisma, PostgreSQL, and NextAuth.js.
 
-> 🌐 **Live Demo**: [https://task-manager-m0oebaoa1-infodasher.vercel.app](https://task-manager-m0oebaoa1-infodasher.vercel.app)
+> 🌐 **Live Demo**: [https://task-manager-infodasher.vercel.app](https://task-manager-infodasher.vercel.app)
 
 ## 🔑 Demo Credentials
 
