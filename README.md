@@ -2,7 +2,7 @@
 
 A modern, full-stack task management application built with Next.js 14, Prisma, PostgreSQL, and NextAuth.js.
 
-> 🌐 **Live Demo**: [https://task-manager-demo.vercel.app](https://task-manager-demo.vercel.app) *(Update with your deployed URL)*
+> 🌐 **Live Demo**: [https://task-manager-m0oebaoa1-infodasher.vercel.app](https://task-manager-m0oebaoa1-infodasher.vercel.app)
 
 ## 🔑 Demo Credentials
 
@@ -240,13 +240,13 @@ docker-compose up -d
 
 ### Current Scope (By Design)
 
-| Feature | Status | Rationale |
-|---------|--------|----------|
-| Refresh token rotation | ❌ Omitted | Overkill for assignment scope; session expiry is sufficient |
-| Role-based access (RBAC) | ❌ Omitted | Single-user ownership model meets requirements |
-| Real-time updates | ❌ Omitted | Would add WebSockets/Pusher for production |
-| Email verification | ❌ Omitted | Would add Resend/SendGrid for production |
-| File uploads | ❌ Omitted | Would add S3/Cloudinary if needed |
+| Feature                  | Status     | Rationale                                                   |
+| ------------------------ | ---------- | ----------------------------------------------------------- |
+| Refresh token rotation   | ❌ Omitted | Overkill for assignment scope; session expiry is sufficient |
+| Role-based access (RBAC) | ❌ Omitted | Single-user ownership model meets requirements              |
+| Real-time updates        | ❌ Omitted | Would add WebSockets/Pusher for production                  |
+| Email verification       | ❌ Omitted | Would add Resend/SendGrid for production                    |
+| File uploads             | ❌ Omitted | Would add S3/Cloudinary if needed                           |
 
 ### If I Had More Time
 
