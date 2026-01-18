@@ -182,9 +182,9 @@ export default function ProjectDetailPage() {
 
   return (
     <div className="space-y-6">
-      {/* Project Header */}
+      {/* Project Overview */}
       <Card>
-        <CardHeader>
+        <CardHeader className="border-b border-gray-100">
           <div className="flex items-start justify-between">
             {isEditing ? (
               <div className="space-y-4 flex-1 mr-4">
@@ -203,11 +203,12 @@ export default function ProjectDetailPage() {
             ) : (
               <div>
                 <div className="flex items-center gap-3">
-                  <CardTitle className="text-2xl text-gray-900 font-bold">{project.name}</CardTitle>
+                  <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">Project</span>
                   <ProjectStatusBadge status={project.status} />
                 </div>
+                <CardTitle className="mt-2 text-2xl text-gray-900 font-bold">{project.name}</CardTitle>
                 <CardDescription className="mt-2 text-gray-600">{project.description || "No description"}</CardDescription>
-                <p className="text-sm text-gray-500 mt-2">
+                <p className="text-sm text-gray-500 mt-3">
                   Created {formatDate(project.createdAt)} • Updated {formatDate(project.updatedAt)}
                 </p>
               </div>
@@ -235,13 +236,30 @@ export default function ProjectDetailPage() {
             </div>
           </div>
         </CardHeader>
+        <CardContent className="pt-4">
+          <div className="grid grid-cols-2 gap-3 text-sm text-gray-600 sm:grid-cols-4">
+            <div>
+              <span className="text-gray-500">Tasks</span>
+              <p className="font-semibold text-gray-900">{project.tasks.length}</p>
+            </div>
+            <div>
+              <span className="text-gray-500">Status</span>
+              <p className="font-semibold text-gray-900">{project.status.charAt(0) + project.status.slice(1).toLowerCase()}</p>
+            </div>
+          </div>
+        </CardContent>
       </Card>
 
       {/* Tasks Section */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-gray-900">Tasks ({project.tasks.length})</h2>
-        <Button onClick={() => setShowNewTask(true)}>Add Task</Button>
-      </div>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle className="text-lg">Tasks</CardTitle>
+            <CardDescription>{project.tasks.length} total</CardDescription>
+          </div>
+          <Button onClick={() => setShowNewTask(true)}>Add Task</Button>
+        </CardHeader>
+      </Card>
 
       {/* New Task Form */}
       {showNewTask && (

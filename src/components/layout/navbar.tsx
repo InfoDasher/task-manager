@@ -25,14 +25,7 @@ export function Navbar() {
           </Link>
           <nav className="hidden md:flex items-center gap-5">
             {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-blue-600",
-                  pathname === link.href ? "text-blue-600" : "text-gray-600",
-                )}
-              >
+              <Link key={link.href} href={link.href} className={cn("text-sm font-medium transition-colors hover:text-blue-600", pathname === link.href ? "text-blue-600" : "text-gray-600")}>
                 {link.label}
               </Link>
             ))}
