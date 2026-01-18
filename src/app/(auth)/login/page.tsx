@@ -70,13 +70,22 @@ export default function LoginPage() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       {/* Assignment Context */}
       <div className="mb-8 text-center max-w-md">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-3">TaskManager</h1>
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-3">TaskManager</h1>
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-left">
-          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Full-Stack Developer Technical Assignment</p>
-          <p className="text-sm font-medium text-gray-700">CRUD App With Auth + Filtering</p>
-          <p className="text-xs text-gray-500 mt-2">
-            A full-stack application demonstrating authentication, CRUD operations on related data models, and a frontend interface with filtering and search.
-          </p>
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0 mt-0.5">
+              <svg className="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Full-Stack Developer Technical Assignment</p>
+              <p className="text-sm font-medium text-gray-700">CRUD App With Auth + Filtering</p>
+              <p className="text-xs text-gray-500 mt-2">
+                A full-stack application demonstrating authentication, CRUD operations on related data models, and a frontend interface with filtering and search.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
