@@ -203,10 +203,10 @@ export default function ProjectDetailPage() {
             ) : (
               <div>
                 <div className="flex items-center gap-3">
-                  <CardTitle className="text-2xl">{project.name}</CardTitle>
+                  <CardTitle className="text-2xl text-gray-900 font-bold">{project.name}</CardTitle>
                   <ProjectStatusBadge status={project.status} />
                 </div>
-                <CardDescription className="mt-2">{project.description || "No description"}</CardDescription>
+                <CardDescription className="mt-2 text-gray-600">{project.description || "No description"}</CardDescription>
                 <p className="text-sm text-gray-500 mt-2">
                   Created {formatDate(project.createdAt)} • Updated {formatDate(project.updatedAt)}
                 </p>
@@ -289,7 +289,7 @@ export default function ProjectDetailPage() {
       {/* Tasks List */}
       {project.tasks.length === 0 ? (
         <Card>
-          <CardContent className="py-12 text-center text-gray-500">No tasks yet. Add your first task to get started!</CardContent>
+          <CardContent className="py-12 text-center text-gray-600">No tasks yet. Add your first task to get started!</CardContent>
         </Card>
       ) : (
         <div className="space-y-3">
@@ -316,13 +316,13 @@ function TaskCard({ task, onDelete, isDeleting }: { task: Task; onDelete: () => 
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <Link href={`/dashboard/tasks/${task.id}`}>
-                <span className="font-medium hover:text-blue-600 cursor-pointer">{task.title}</span>
+                <span className="font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">{task.title}</span>
               </Link>
               <TaskStatusBadge status={task.status} />
               <TaskPriorityBadge priority={task.priority} />
             </div>
             {task.description && <p className="text-sm text-gray-600 line-clamp-2">{task.description}</p>}
-            <p className="text-xs text-gray-400 mt-2">
+            <p className="text-xs text-gray-500 mt-2">
               Created {formatDate(task.createdAt)}
               {task.dueDate && ` • Due ${formatDate(task.dueDate)}`}
             </p>

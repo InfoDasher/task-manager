@@ -122,13 +122,13 @@ export default function ProjectsPage() {
               <Card className="h-full hover:border-blue-300 hover:shadow-md transition-all cursor-pointer">
                 <CardHeader>
                   <div className="flex items-start justify-between">
-                    <CardTitle className="text-lg">{project.name}</CardTitle>
+                    <CardTitle className="text-lg text-gray-900 font-semibold">{project.name}</CardTitle>
                     <ProjectStatusBadge status={project.status} />
                   </div>
-                  <CardDescription className="line-clamp-2">{project.description || "No description"}</CardDescription>
+                  <CardDescription className="line-clamp-2 text-gray-600">{project.description || "No description"}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center justify-between text-sm text-gray-500">
+                  <div className="flex items-center justify-between text-sm text-gray-600">
                     <span>
                       {project._count.tasks} task{project._count.tasks !== 1 ? "s" : ""}
                     </span>

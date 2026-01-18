@@ -72,8 +72,8 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl text-center">Create an account</CardTitle>
-          <CardDescription className="text-center">Enter your details to create your account</CardDescription>
+          <CardTitle className="text-2xl text-center text-blue-600 font-bold">Create an account</CardTitle>
+          <CardDescription className="text-center text-gray-600">Enter your details to create your account</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">

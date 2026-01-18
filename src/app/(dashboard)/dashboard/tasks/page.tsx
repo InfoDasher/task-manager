@@ -141,13 +141,13 @@ export default function TasksPage() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <Link href={`/dashboard/tasks/${task.id}`}>
-                        <span className="font-medium hover:text-blue-600 cursor-pointer">{task.title}</span>
+                        <span className="font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">{task.title}</span>
                       </Link>
                       <TaskStatusBadge status={task.status} />
                       <TaskPriorityBadge priority={task.priority} />
                     </div>
                     {task.description && <p className="text-sm text-gray-600 line-clamp-2 mb-2">{task.description}</p>}
-                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                    <div className="flex items-center gap-4 text-sm text-gray-600">
                       <Link href={`/dashboard/projects/${task.project.id}`} className="hover:text-blue-600">
                         📁 {task.project.name}
                       </Link>

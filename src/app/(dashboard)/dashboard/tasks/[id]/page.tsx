@@ -178,13 +178,13 @@ export default function TaskDetailPage() {
             ) : (
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <CardTitle className="text-2xl">{task.title}</CardTitle>
+                  <CardTitle className="text-2xl text-gray-900 font-bold">{task.title}</CardTitle>
                 </div>
                 <div className="flex items-center gap-2 mb-4">
                   <TaskStatusBadge status={task.status} />
                   <TaskPriorityBadge priority={task.priority} />
                 </div>
-                <CardDescription className="text-base">{task.description || "No description"}</CardDescription>
+                <CardDescription className="text-base text-gray-600">{task.description || "No description"}</CardDescription>
               </div>
             )}
             <div className="flex gap-2">
@@ -234,22 +234,22 @@ export default function TaskDetailPage() {
           {/* Task Details */}
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="text-gray-500">Project:</span>
+              <span className="text-gray-600 font-medium">Project:</span>
               <Link href={`/dashboard/projects/${task.project.id}`} className="ml-2 text-blue-600 hover:underline">
                 {task.project.name}
               </Link>
             </div>
             <div>
-              <span className="text-gray-500">Due Date:</span>
-              <span className="ml-2">{task.dueDate ? formatDate(task.dueDate) : "Not set"}</span>
+              <span className="text-gray-600 font-medium">Due Date:</span>
+              <span className="ml-2 text-gray-900">{task.dueDate ? formatDate(task.dueDate) : "Not set"}</span>
             </div>
             <div>
-              <span className="text-gray-500">Created:</span>
-              <span className="ml-2">{formatDateTime(task.createdAt)}</span>
+              <span className="text-gray-600 font-medium">Created:</span>
+              <span className="ml-2 text-gray-900">{formatDateTime(task.createdAt)}</span>
             </div>
             <div>
-              <span className="text-gray-500">Updated:</span>
-              <span className="ml-2">{formatDateTime(task.updatedAt)}</span>
+              <span className="text-gray-600 font-medium">Updated:</span>
+              <span className="ml-2 text-gray-900">{formatDateTime(task.updatedAt)}</span>
             </div>
           </div>
         </CardContent>
