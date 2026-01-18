@@ -4,20 +4,22 @@ import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { TaskStatus, TaskPriority, ProjectStatus } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProjectStatusBadge, TaskStatusBadge, TaskPriorityBadge } from "@/components/ui/badge";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { formatDate } from "@/lib/utils";
 
 interface Task {
   id: string;
   title: string;
   description: string | null;
-  status: string;
-  priority: string;
+  status: TaskStatus;
+  priority: TaskPriority;
   dueDate: string | null;
   createdAt: string;
 }
@@ -26,7 +28,7 @@ interface Project {
   id: string;
   name: string;
   description: string | null;
-  status: string;
+  status: ProjectStatus;
   createdAt: string;
   updatedAt: string;
   tasks: Task[];
@@ -55,6 +57,7 @@ export default function ProjectDetailPage() {
   const [newTaskDescription, setNewTaskDescription] = useState("");
   const [newTaskStatus, setNewTaskStatus] = useState("TODO");
   const [newTaskPriority, setNewTaskPriority] = useState("MEDIUM");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const { data, isLoading, error } = useQuery<ProjectResponse>({
     queryKey: ["project", projectId],
@@ -141,9 +144,12 @@ export default function ProjectDetailPage() {
   };
 
   const handleDelete = () => {
-    if (confirm("Are you sure you want to delete this project? This will also delete all tasks.")) {
-      deleteProjectMutation.mutate();
-    }
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = () => {
+    deleteProjectMutation.mutate();
+    setShowDeleteConfirm(false);
   };
 
   const handleCreateTask = (e: React.FormEvent) => {
@@ -182,6 +188,18 @@ export default function ProjectDetailPage() {
 
   return (
     <div className="space-y-6">
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        open={showDeleteConfirm}
+        onOpenChange={setShowDeleteConfirm}
+        title="Delete Project"
+        description="Are you sure you want to delete this project? This will also delete all tasks. This action cannot be undone."
+        confirmLabel="Delete Project"
+        variant="danger"
+        onConfirm={confirmDelete}
+        isLoading={deleteProjectMutation.isPending}
+      />
+
       {/* Project Overview */}
       <Card>
         <CardHeader className="border-b border-gray-100">

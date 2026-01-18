@@ -66,29 +66,27 @@ export async function PUT(request: Request, { params }: RouteParams) {
       return NextResponse.json(errorResponse("Validation failed", errors as Record<string, string[]>), { status: 400 });
     }
 
-    // Check ownership
-    const existingProject = await prisma.project.findFirst({
-      where: {
-        id,
-        userId: session.user.id,
-      },
-    });
+    // Update with ownership check in a single query
+    const project = await prisma.project
+      .update({
+        where: {
+          id,
+          userId: session.user.id, // Ownership enforcement
+        },
+        data: parsed.data,
+        include: {
+          _count: {
+            select: { tasks: true },
+          },
+        },
+      })
+      .catch(() => null);
 
-    if (!existingProject) {
+    if (!project) {
       return NextResponse.json(errorResponse("Project not found"), {
         status: 404,
       });
     }
-
-    const project = await prisma.project.update({
-      where: { id },
-      data: parsed.data,
-      include: {
-        _count: {
-          select: { tasks: true },
-        },
-      },
-    });
 
     return NextResponse.json(successResponse(project));
   } catch (error) {
@@ -109,23 +107,21 @@ export async function DELETE(request: Request, { params }: RouteParams) {
 
     const { id } = await params;
 
-    // Check ownership
-    const existingProject = await prisma.project.findFirst({
-      where: {
-        id,
-        userId: session.user.id,
-      },
-    });
+    // Delete with ownership check in a single query
+    const deleted = await prisma.project
+      .delete({
+        where: {
+          id,
+          userId: session.user.id, // Ownership enforcement
+        },
+      })
+      .catch(() => null);
 
-    if (!existingProject) {
+    if (!deleted) {
       return NextResponse.json(errorResponse("Project not found"), {
         status: 404,
       });
     }
-
-    await prisma.project.delete({
-      where: { id },
-    });
 
     return NextResponse.json(successResponse({ message: "Project deleted" }));
   } catch (error) {

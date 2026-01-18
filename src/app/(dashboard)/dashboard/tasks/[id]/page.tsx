@@ -4,27 +4,29 @@ import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { TaskStatus, TaskPriority, ProjectStatus } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TaskStatusBadge, TaskPriorityBadge } from "@/components/ui/badge";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { formatDate, formatDateTime } from "@/lib/utils";
 
 interface Task {
   id: string;
   title: string;
   description: string | null;
-  status: string;
-  priority: string;
+  status: TaskStatus;
+  priority: TaskPriority;
   dueDate: string | null;
   createdAt: string;
   updatedAt: string;
   project: {
     id: string;
     name: string;
-    status: string;
+    status: ProjectStatus;
   };
 }
 
@@ -45,6 +47,7 @@ export default function TaskDetailPage() {
   const [editStatus, setEditStatus] = useState("");
   const [editPriority, setEditPriority] = useState("");
   const [editDueDate, setEditDueDate] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const { data, isLoading, error } = useQuery<TaskResponse>({
     queryKey: ["task", taskId],
@@ -108,9 +111,12 @@ export default function TaskDetailPage() {
   };
 
   const handleDelete = () => {
-    if (confirm("Are you sure you want to delete this task?")) {
-      deleteTaskMutation.mutate();
-    }
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = () => {
+    deleteTaskMutation.mutate();
+    setShowDeleteConfirm(false);
   };
 
   const handleQuickStatusChange = (newStatus: string) => {
@@ -143,6 +149,18 @@ export default function TaskDetailPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        open={showDeleteConfirm}
+        onOpenChange={setShowDeleteConfirm}
+        title="Delete Task"
+        description="Are you sure you want to delete this task? This action cannot be undone."
+        confirmLabel="Delete Task"
+        variant="danger"
+        onConfirm={confirmDelete}
+        isLoading={deleteTaskMutation.isPending}
+      />
+
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center text-sm text-gray-500">
         <Link href="/dashboard/projects" className="hover:text-blue-600">

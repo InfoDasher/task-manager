@@ -2,18 +2,19 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import type { TaskStatus, TaskPriority } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TaskStatusBadge, TaskPriorityBadge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
 
-type TaskStatusCount = { status: string; _count: number };
+type TaskStatusCount = { status: TaskStatus; _count: number };
 
 type RecentTask = {
   id: string;
   title: string;
-  status: string;
-  priority: string;
+  status: TaskStatus;
+  priority: TaskPriority;
   updatedAt: Date;
   project: { id: string; name: string };
 };
@@ -52,7 +53,6 @@ export default async function DashboardPage() {
   const todoCount = (taskStats as TaskStatusCount[]).find((s) => s.status === "TODO")?._count || 0;
   const inProgressCount = (taskStats as TaskStatusCount[]).find((s) => s.status === "IN_PROGRESS")?._count || 0;
   const doneCount = (taskStats as TaskStatusCount[]).find((s) => s.status === "DONE")?._count || 0;
-  const totalTasks = todoCount + inProgressCount + doneCount;
 
   return (
     <div className="space-y-8">
