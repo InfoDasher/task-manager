@@ -1,0 +1,56 @@
+import { cn } from "@/lib/utils";
+
+interface BadgeProps {
+  children: React.ReactNode;
+  variant?: "default" | "success" | "warning" | "error" | "info";
+  className?: string;
+}
+
+export function Badge({ children, variant = "default", className }: BadgeProps) {
+  const variants = {
+    default: "bg-gray-100 text-gray-800",
+    success: "bg-green-100 text-green-800",
+    warning: "bg-yellow-100 text-yellow-800",
+    error: "bg-red-100 text-red-800",
+    info: "bg-blue-100 text-blue-800",
+  };
+
+  return <span className={cn("inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium", variants[variant], className)}>{children}</span>;
+}
+
+// Status badges
+export function ProjectStatusBadge({ status }: { status: string }) {
+  const variants: Record<string, "success" | "warning" | "info"> = {
+    ACTIVE: "success",
+    ARCHIVED: "warning",
+    COMPLETED: "info",
+  };
+
+  return <Badge variant={variants[status] || "default"}>{status.charAt(0) + status.slice(1).toLowerCase()}</Badge>;
+}
+
+export function TaskStatusBadge({ status }: { status: string }) {
+  const variants: Record<string, "default" | "warning" | "success"> = {
+    TODO: "default",
+    IN_PROGRESS: "warning",
+    DONE: "success",
+  };
+
+  const labels: Record<string, string> = {
+    TODO: "To Do",
+    IN_PROGRESS: "In Progress",
+    DONE: "Done",
+  };
+
+  return <Badge variant={variants[status] || "default"}>{labels[status] || status}</Badge>;
+}
+
+export function TaskPriorityBadge({ priority }: { priority: string }) {
+  const variants: Record<string, "success" | "warning" | "error"> = {
+    LOW: "success",
+    MEDIUM: "warning",
+    HIGH: "error",
+  };
+
+  return <Badge variant={variants[priority] || "default"}>{priority.charAt(0) + priority.slice(1).toLowerCase()}</Badge>;
+}
