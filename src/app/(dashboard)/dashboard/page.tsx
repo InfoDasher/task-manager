@@ -9,6 +9,15 @@ import { formatDate } from "@/lib/utils";
 
 type TaskStatusCount = { status: string; _count: number };
 
+type RecentTask = {
+  id: string;
+  title: string;
+  status: string;
+  priority: string;
+  updatedAt: Date;
+  project: { id: string; name: string };
+};
+
 export default async function DashboardPage() {
   const session = await auth();
 
@@ -157,7 +166,9 @@ export default async function DashboardPage() {
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-xl text-gray-900">Recent Tasks</CardTitle>
           <Link href="/dashboard/tasks">
-            <Button variant="outline" size="sm">View All</Button>
+            <Button variant="outline" size="sm">
+              View All
+            </Button>
           </Link>
         </CardHeader>
         <CardContent>
@@ -165,7 +176,7 @@ export default async function DashboardPage() {
             <p className="text-gray-500 text-center py-4">No tasks yet. Create a project and add some tasks!</p>
           ) : (
             <div className="space-y-3">
-              {recentTasks.map((task) => (
+              {(recentTasks as RecentTask[]).map((task) => (
                 <Link key={task.id} href={`/dashboard/tasks/${task.id}`} className="block">
                   <div className="flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:bg-gray-50 hover:border-gray-200 transition-all">
                     <div className="flex-1 min-w-0">
