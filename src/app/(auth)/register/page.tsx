@@ -99,11 +99,11 @@ export default function RegisterPage() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       {/* Assignment Context */}
       <div className="mb-8 text-center max-w-md">
-        <h1 className="text-3xl font-bold text-blue-600 mb-2">TaskManager</h1>
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">
-          <p className="text-xs font-semibold text-blue-800 uppercase tracking-wide mb-1">Full-Stack Developer Technical Assignment</p>
-          <p className="text-sm font-medium text-blue-700">CRUD App With Auth + Filtering</p>
-          <p className="text-xs text-blue-600 mt-2">
+        <h1 className="text-3xl font-bold text-blue-600 mb-3">TaskManager</h1>
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-left">
+          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Full-Stack Developer Technical Assignment</p>
+          <p className="text-sm font-medium text-gray-700">CRUD App With Auth + Filtering</p>
+          <p className="text-xs text-gray-500 mt-2">
             A full-stack application demonstrating authentication, CRUD operations on related data models, and a frontend interface with filtering and search.
           </p>
         </div>
