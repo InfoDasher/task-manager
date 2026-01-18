@@ -21,11 +21,11 @@ export function Navbar() {
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="flex items-center space-x-2">
-            <span className="text-xl font-bold bg-gradient-to-r from-indigo-500/90 to-violet-600/90 bg-clip-text text-transparent">TaskManager</span>
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">TaskManager</span>
           </Link>
           <nav className="hidden md:flex items-center gap-5">
             {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} className={cn("text-sm font-medium transition-colors hover:text-indigo-500", pathname === link.href ? "text-indigo-600" : "text-gray-600")}>
+              <Link key={link.href} href={link.href} className={cn("text-sm font-medium transition-colors hover:text-blue-600", pathname === link.href ? "text-blue-600" : "text-gray-600")}>
                 {link.label}
               </Link>
             ))}
