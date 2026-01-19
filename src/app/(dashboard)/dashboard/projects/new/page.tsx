@@ -59,21 +59,21 @@ export default function NewProjectPage() {
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
-            {error && <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">{error}</div>}
+            {error && <div className="p-3 text-sm text-destructive bg-[var(--badge-red-bg)] border border-destructive/30 rounded-md">{error}</div>}
             <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium text-gray-700">
+              <label htmlFor="name" className="text-sm font-medium text-foreground">
                 Project Name *
               </label>
               <Input id="name" placeholder="My Awesome Project" value={name} onChange={(e) => setName(e.target.value)} required error={fieldErrors.name?.[0]} />
             </div>
             <div className="space-y-2">
-              <label htmlFor="description" className="text-sm font-medium text-gray-700">
+              <label htmlFor="description" className="text-sm font-medium text-foreground">
                 Description
               </label>
               <Textarea id="description" placeholder="Describe your project..." value={description} onChange={(e) => setDescription(e.target.value)} rows={4} error={fieldErrors.description?.[0]} />
             </div>
             <div className="space-y-2">
-              <label htmlFor="status" className="text-sm font-medium text-gray-700">
+              <label htmlFor="status" className="text-sm font-medium text-foreground">
                 Status
               </label>
               <Select

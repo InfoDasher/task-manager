@@ -58,8 +58,8 @@ export default async function DashboardPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-1">Welcome back, {session.user.name || session.user.email}!</p>
+          <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-muted-foreground mt-1">Welcome back, {session.user.name || session.user.email}!</p>
         </div>
         <Link href="/dashboard/projects/new">
           <Button>New Project</Button>
@@ -68,9 +68,9 @@ export default async function DashboardPage() {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Link href="/dashboard/projects">
-          <Card className="cursor-pointer hover:shadow-md hover:border-blue-200 transition-all">
+          <Card className="cursor-pointer hover:shadow-md hover:border-blue-500/50 transition-all">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-700">Total Projects</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Total Projects</CardTitle>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -79,21 +79,21 @@ export default async function DashboardPage() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="h-4 w-4 text-gray-500"
+                className="h-4 w-4 text-muted-foreground"
               >
                 <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
               </svg>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-gray-900">{projectCount}</div>
+              <div className="text-3xl font-bold text-foreground">{projectCount}</div>
             </CardContent>
           </Card>
         </Link>
 
         <Link href="/dashboard/tasks?status=TODO">
-          <Card className="cursor-pointer hover:shadow-md hover:border-gray-300 transition-all">
+          <Card className="cursor-pointer hover:shadow-md hover:border-card-border-hover transition-all">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-700">To Do</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">To Do</CardTitle>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -102,21 +102,21 @@ export default async function DashboardPage() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="h-4 w-4 text-gray-500"
+                className="h-4 w-4 text-muted-foreground"
               >
                 <circle cx="12" cy="12" r="10" />
               </svg>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-gray-900">{todoCount}</div>
+              <div className="text-3xl font-bold text-foreground">{todoCount}</div>
             </CardContent>
           </Card>
         </Link>
 
         <Link href="/dashboard/tasks?status=IN_PROGRESS">
-          <Card className="cursor-pointer hover:shadow-md hover:border-yellow-200 transition-all">
+          <Card className="cursor-pointer hover:shadow-md hover:border-yellow-500/50 transition-all">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-700">In Progress</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">In Progress</CardTitle>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -131,15 +131,15 @@ export default async function DashboardPage() {
               </svg>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-gray-900">{inProgressCount}</div>
+              <div className="text-3xl font-bold text-foreground">{inProgressCount}</div>
             </CardContent>
           </Card>
         </Link>
 
         <Link href="/dashboard/tasks?status=DONE">
-          <Card className="cursor-pointer hover:shadow-md hover:border-green-200 transition-all">
+          <Card className="cursor-pointer hover:shadow-md hover:border-green-500/50 transition-all">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-700">Completed</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Completed</CardTitle>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -155,7 +155,7 @@ export default async function DashboardPage() {
               </svg>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-gray-900">{doneCount}</div>
+              <div className="text-3xl font-bold text-foreground">{doneCount}</div>
             </CardContent>
           </Card>
         </Link>
@@ -164,7 +164,7 @@ export default async function DashboardPage() {
       {/* Recent Tasks */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-xl text-gray-900">Recent Tasks</CardTitle>
+          <CardTitle className="text-xl">Recent Tasks</CardTitle>
           <Link href="/dashboard/tasks">
             <Button variant="outline" size="sm">
               View All
@@ -173,23 +173,23 @@ export default async function DashboardPage() {
         </CardHeader>
         <CardContent>
           {recentTasks.length === 0 ? (
-            <p className="text-gray-500 text-center py-4">No tasks yet. Create a project and add some tasks!</p>
+            <p className="text-muted-foreground text-center py-4">No tasks yet. Create a project and add some tasks!</p>
           ) : (
             <div className="space-y-3">
               {(recentTasks as RecentTask[]).map((task) => (
                 <Link key={task.id} href={`/dashboard/tasks/${task.id}`} className="block">
-                  <div className="flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:bg-gray-50 hover:border-gray-200 transition-all">
+                  <div className="flex items-center justify-between p-3 rounded-lg border border-card-border hover:bg-accent hover:border-card-border-hover transition-all">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-gray-900 truncate">{task.title}</span>
+                        <span className="font-medium text-foreground truncate">{task.title}</span>
                         <TaskStatusBadge status={task.status} />
                         <TaskPriorityBadge priority={task.priority} />
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-muted-foreground mt-1">
                         {task.project.name} • Updated {formatDate(task.updatedAt)}
                       </p>
                     </div>
-                    <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="h-4 w-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </div>
@@ -202,7 +202,7 @@ export default async function DashboardPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl text-gray-900">Quick Actions</CardTitle>
+          <CardTitle className="text-xl">Quick Actions</CardTitle>
         </CardHeader>
         <CardContent className="flex gap-4">
           <Link href="/dashboard/projects">

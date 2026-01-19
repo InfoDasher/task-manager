@@ -126,8 +126,8 @@ export default function TaskDetailPage() {
   if (isLoading) {
     return (
       <div className="text-center py-12">
-        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
-        <p className="mt-4 text-gray-600">Loading task...</p>
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
+        <p className="mt-4 text-muted-foreground">Loading task...</p>
       </div>
     );
   }
@@ -136,7 +136,7 @@ export default function TaskDetailPage() {
     return (
       <Card>
         <CardContent className="py-12 text-center">
-          <p className="text-red-600 mb-4">Task not found or failed to load.</p>
+          <p className="text-destructive mb-4">Task not found or failed to load.</p>
           <Link href="/dashboard/tasks">
             <Button variant="outline">Back to Tasks</Button>
           </Link>
@@ -162,16 +162,16 @@ export default function TaskDetailPage() {
       />
 
       {/* Breadcrumb Navigation */}
-      <nav className="flex items-center text-sm text-gray-500">
-        <Link href="/dashboard/projects" className="hover:text-blue-600">
+      <nav className="flex items-center text-sm text-muted-foreground">
+        <Link href="/dashboard/projects" className="hover:text-primary">
           Projects
         </Link>
         <span className="mx-2">/</span>
-        <Link href={`/dashboard/projects/${task.project.id}`} className="hover:text-blue-600">
+        <Link href={`/dashboard/projects/${task.project.id}`} className="hover:text-primary">
           {task.project.name}
         </Link>
         <span className="mx-2">/</span>
-        <span className="text-gray-900 font-medium">{task.title}</span>
+        <span className="text-foreground font-medium">{task.title}</span>
       </nav>
 
       <Card>
@@ -202,20 +202,20 @@ export default function TaskDetailPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Due Date</label>
+                  <label className="text-sm font-medium text-foreground">Due Date</label>
                   <Input type="date" value={editDueDate} onChange={(e) => setEditDueDate(e.target.value)} />
                 </div>
               </div>
             ) : (
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <CardTitle className="text-2xl text-gray-900 font-bold">{task.title}</CardTitle>
+                  <CardTitle className="text-2xl text-foreground font-bold">{task.title}</CardTitle>
                 </div>
                 <div className="flex items-center gap-2 mb-4">
                   <TaskStatusBadge status={task.status} />
                   <TaskPriorityBadge priority={task.priority} />
                 </div>
-                <CardDescription className="text-base text-gray-600">{task.description || "No description"}</CardDescription>
+                <CardDescription className="text-base text-muted-foreground">{task.description || "No description"}</CardDescription>
               </div>
             )}
             <div className="flex gap-2">
@@ -245,7 +245,7 @@ export default function TaskDetailPage() {
           {/* Quick Status Change */}
           {!isEditing && (
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Quick Status Update</label>
+              <label className="text-sm font-medium text-foreground">Quick Status Update</label>
               <div className="flex gap-2">
                 {["TODO", "IN_PROGRESS", "DONE"].map((status) => (
                   <Button
@@ -265,22 +265,22 @@ export default function TaskDetailPage() {
           {/* Task Details */}
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="text-gray-600 font-medium">Project:</span>
-              <Link href={`/dashboard/projects/${task.project.id}`} className="ml-2 text-blue-600 hover:underline">
+              <span className="text-muted-foreground font-medium">Project:</span>
+              <Link href={`/dashboard/projects/${task.project.id}`} className="ml-2 text-primary hover:underline">
                 {task.project.name}
               </Link>
             </div>
             <div>
-              <span className="text-gray-600 font-medium">Due Date:</span>
-              <span className="ml-2 text-gray-900">{task.dueDate ? formatDate(task.dueDate) : "Not set"}</span>
+              <span className="text-muted-foreground font-medium">Due Date:</span>
+              <span className="ml-2 text-foreground">{task.dueDate ? formatDate(task.dueDate) : "Not set"}</span>
             </div>
             <div>
-              <span className="text-gray-600 font-medium">Created:</span>
-              <span className="ml-2 text-gray-900">{formatDateTime(task.createdAt)}</span>
+              <span className="text-muted-foreground font-medium">Created:</span>
+              <span className="ml-2 text-foreground">{formatDateTime(task.createdAt)}</span>
             </div>
             <div>
-              <span className="text-gray-600 font-medium">Updated:</span>
-              <span className="ml-2 text-gray-900">{formatDateTime(task.updatedAt)}</span>
+              <span className="text-muted-foreground font-medium">Updated:</span>
+              <span className="ml-2 text-foreground">{formatDateTime(task.updatedAt)}</span>
             </div>
           </div>
         </CardContent>

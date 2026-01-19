@@ -60,8 +60,8 @@ export default function ProjectsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Projects</h1>
-          <p className="text-gray-600 mt-1">Manage your projects and tasks</p>
+          <h1 className="text-3xl font-bold text-foreground">Projects</h1>
+          <p className="text-muted-foreground mt-1">Manage your projects and tasks</p>
         </div>
         <Link href="/dashboard/projects/new">
           <Button>New Project</Button>
@@ -99,17 +99,17 @@ export default function ProjectsPage() {
       {/* Projects List */}
       {isLoading ? (
         <div className="text-center py-12">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
-          <p className="mt-4 text-gray-600">Loading projects...</p>
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
+          <p className="mt-4 text-muted-foreground">Loading projects...</p>
         </div>
       ) : error ? (
         <Card>
-          <CardContent className="py-12 text-center text-red-600">Failed to load projects. Please try again.</CardContent>
+          <CardContent className="py-12 text-center text-destructive">Failed to load projects. Please try again.</CardContent>
         </Card>
       ) : data?.data.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <p className="text-gray-600 mb-4">No projects found.</p>
+            <p className="text-muted-foreground mb-4">No projects found.</p>
             <Link href="/dashboard/projects/new">
               <Button>Create your first project</Button>
             </Link>
@@ -119,16 +119,16 @@ export default function ProjectsPage() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {data?.data.map((project) => (
             <Link key={project.id} href={`/dashboard/projects/${project.id}`}>
-              <Card className="h-full hover:border-blue-300 hover:shadow-md transition-all cursor-pointer">
+              <Card className="h-full hover:border-primary/50 hover:shadow-md transition-all cursor-pointer">
                 <CardHeader>
                   <div className="flex items-start justify-between">
-                    <CardTitle className="text-lg text-gray-900 font-semibold">{project.name}</CardTitle>
+                    <CardTitle className="text-lg font-semibold">{project.name}</CardTitle>
                     <ProjectStatusBadge status={project.status} />
                   </div>
-                  <CardDescription className="line-clamp-2 text-gray-600">{project.description || "No description"}</CardDescription>
+                  <CardDescription className="line-clamp-2">{project.description || "No description"}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center justify-between text-sm text-gray-600">
+                  <div className="flex items-center justify-between text-sm text-muted-foreground">
                     <span>
                       {project._count.tasks} task{project._count.tasks !== 1 ? "s" : ""}
                     </span>
@@ -147,7 +147,7 @@ export default function ProjectsPage() {
           <Button variant="outline" size="sm" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>
             Previous
           </Button>
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-muted-foreground">
             Page {data.pagination.page} of {data.pagination.totalPages}
           </span>
           <Button variant="outline" size="sm" onClick={() => setPage((p) => Math.min(data.pagination.totalPages, p + 1))} disabled={page === data.pagination.totalPages}>

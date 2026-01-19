@@ -1,22 +1,124 @@
 @import "tailwindcss";
 
 :root {
+  /* Background colors */
   --background: #ffffff;
   --foreground: #171717;
+  --muted: #f9fafb;
+  --muted-foreground: #6b7280;
+
+  /* Card/Surface colors */
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --card-border: #e5e7eb;
+  --card-border-hover: #d1d5db;
+
+  /* Input colors */
+  --input: #ffffff;
+  --input-border: #d1d5db;
+  --input-border-focus: #3b82f6;
+
+  /* Primary colors */
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-foreground: #ffffff;
+
+  /* Accent colors */
+  --accent: #f3f4f6;
+  --accent-foreground: #111827;
+
+  /* Destructive colors */
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+
+  /* Ring/Focus colors */
+  --ring: #3b82f6;
+  --ring-offset: #ffffff;
+
+  /* Status badge colors */
+  --badge-gray-bg: #f3f4f6;
+  --badge-gray-text: #1f2937;
+  --badge-green-bg: #dcfce7;
+  --badge-green-text: #166534;
+  --badge-yellow-bg: #fef9c3;
+  --badge-yellow-text: #854d0e;
+  --badge-red-bg: #fee2e2;
+  --badge-red-text: #991b1b;
+  --badge-blue-bg: #dbeafe;
+  --badge-blue-text: #1e40af;
+}
+
+.dark {
+  /* Background colors */
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --muted: #1f2937;
+  --muted-foreground: #9ca3af;
+
+  /* Card/Surface colors */
+  --card: #18181b;
+  --card-foreground: #fafafa;
+  --card-border: #27272a;
+  --card-border-hover: #3f3f46;
+
+  /* Input colors */
+  --input: #27272a;
+  --input-border: #3f3f46;
+  --input-border-focus: #3b82f6;
+
+  /* Primary colors */
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --primary-foreground: #ffffff;
+
+  /* Accent colors */
+  --accent: #27272a;
+  --accent-foreground: #fafafa;
+
+  /* Destructive colors */
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  /* Ring/Focus colors */
+  --ring: #3b82f6;
+  --ring-offset: #0a0a0a;
+
+  /* Status badge colors - darker backgrounds for dark mode */
+  --badge-gray-bg: #374151;
+  --badge-gray-text: #e5e7eb;
+  --badge-green-bg: #14532d;
+  --badge-green-text: #bbf7d0;
+  --badge-yellow-bg: #713f12;
+  --badge-yellow-text: #fef08a;
+  --badge-red-bg: #7f1d1d;
+  --badge-red-text: #fecaca;
+  --badge-blue-bg: #1e3a8a;
+  --badge-blue-text: #bfdbfe;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-card-border: var(--card-border);
+  --color-card-border-hover: var(--card-border-hover);
+  --color-input: var(--input);
+  --color-input-border: var(--input-border);
+  --color-input-border-focus: var(--input-border-focus);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-ring: var(--ring);
+  --color-ring-offset: var(--ring-offset);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {

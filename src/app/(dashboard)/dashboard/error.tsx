@@ -23,8 +23,8 @@ export default function DashboardError({ error, reset }: ErrorProps) {
     <div className="flex items-center justify-center min-h-[60vh]">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
-            <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-[var(--badge-red-bg)] flex items-center justify-center">
+            <svg className="h-6 w-6 text-[var(--badge-red-text)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -32,11 +32,11 @@ export default function DashboardError({ error, reset }: ErrorProps) {
               />
             </svg>
           </div>
-          <CardTitle className="text-xl text-gray-900">Something went wrong</CardTitle>
+          <CardTitle className="text-xl">Something went wrong</CardTitle>
         </CardHeader>
         <CardContent className="text-center space-y-4">
-          <p className="text-gray-600 text-sm">We encountered an error while loading the dashboard. This has been logged and we&apos;ll look into it.</p>
-          {error.digest && <p className="text-xs text-gray-400 font-mono">Error ID: {error.digest}</p>}
+          <p className="text-muted-foreground text-sm">We encountered an error while loading the dashboard. This has been logged and we&apos;ll look into it.</p>
+          {error.digest && <p className="text-xs text-muted-foreground font-mono">Error ID: {error.digest}</p>}
           <div className="flex gap-3 justify-center pt-2">
             <Button onClick={reset} variant="default">
               Try again

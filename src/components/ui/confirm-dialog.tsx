@@ -65,11 +65,11 @@ export function ConfirmDialog({ open, onOpenChange, title, description, confirmL
       <div className="fixed inset-0 bg-black/50 animate-in fade-in-0" />
 
       {/* Dialog */}
-      <div className="relative z-50 w-full max-w-md bg-white rounded-lg shadow-lg p-6 animate-in zoom-in-95 fade-in-0">
-        <h2 id="dialog-title" className="text-lg font-semibold text-gray-900">
+      <div className="relative z-50 w-full max-w-md bg-card rounded-lg shadow-lg p-6 animate-in zoom-in-95 fade-in-0 border border-card-border">
+        <h2 id="dialog-title" className="text-lg font-semibold text-card-foreground">
           {title}
         </h2>
-        <p id="dialog-description" className="mt-2 text-sm text-gray-600">
+        <p id="dialog-description" className="mt-2 text-sm text-muted-foreground">
           {description}
         </p>
 
@@ -84,7 +84,7 @@ export function ConfirmDialog({ open, onOpenChange, title, description, confirmL
               onConfirm();
             }}
             isLoading={isLoading}
-            className={cn(variant === "danger" && "bg-red-600 hover:bg-red-700 focus:ring-red-500")}
+            className={cn(variant === "danger" && "bg-destructive hover:bg-red-700 focus:ring-red-500")}
           >
             {confirmLabel}
           </Button>

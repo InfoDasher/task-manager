@@ -69,8 +69,8 @@ function TasksContent() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Tasks</h1>
-          <p className="text-gray-600 mt-1">View and manage all your tasks across projects</p>
+          <h1 className="text-3xl font-bold text-foreground">Tasks</h1>
+          <p className="text-muted-foreground mt-1">View and manage all your tasks across projects</p>
         </div>
       </div>
 
@@ -119,17 +119,17 @@ function TasksContent() {
       {/* Tasks List */}
       {isLoading ? (
         <div className="text-center py-12">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
-          <p className="mt-4 text-gray-600">Loading tasks...</p>
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
+          <p className="mt-4 text-muted-foreground">Loading tasks...</p>
         </div>
       ) : error ? (
         <Card>
-          <CardContent className="py-12 text-center text-red-600">Failed to load tasks. Please try again.</CardContent>
+          <CardContent className="py-12 text-center text-destructive">Failed to load tasks. Please try again.</CardContent>
         </Card>
       ) : data?.data.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <p className="text-gray-600 mb-4">No tasks found.</p>
+            <p className="text-muted-foreground mb-4">No tasks found.</p>
             <Link href="/dashboard/projects">
               <Button>Go to Projects to create tasks</Button>
             </Link>
@@ -138,20 +138,20 @@ function TasksContent() {
       ) : (
         <div className="space-y-3">
           {data?.data.map((task) => (
-            <Card key={task.id} className="hover:border-blue-300 transition-colors">
+            <Card key={task.id} className="hover:border-primary/50 transition-colors">
               <CardContent className="py-4">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <Link href={`/dashboard/tasks/${task.id}`}>
-                        <span className="font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">{task.title}</span>
+                        <span className="font-semibold text-foreground hover:text-primary cursor-pointer">{task.title}</span>
                       </Link>
                       <TaskStatusBadge status={task.status} />
                       <TaskPriorityBadge priority={task.priority} />
                     </div>
-                    {task.description && <p className="text-sm text-gray-600 line-clamp-2 mb-2">{task.description}</p>}
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
-                      <Link href={`/dashboard/projects/${task.project.id}`} className="hover:text-blue-600">
+                    {task.description && <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{task.description}</p>}
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <Link href={`/dashboard/projects/${task.project.id}`} className="hover:text-primary">
                         📁 {task.project.name}
                       </Link>
                       <span>Created {formatDate(task.createdAt)}</span>
@@ -176,7 +176,7 @@ function TasksContent() {
           <Button variant="outline" size="sm" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>
             Previous
           </Button>
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-muted-foreground">
             Page {data.pagination.page} of {data.pagination.totalPages}
           </span>
           <Button variant="outline" size="sm" onClick={() => setPage((p) => Math.min(data.pagination.totalPages, p + 1))} disabled={page === data.pagination.totalPages}>
@@ -192,12 +192,12 @@ function TasksLoading() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Tasks</h1>
-        <p className="text-gray-600 mt-1">View and manage all your tasks across projects</p>
+        <h1 className="text-3xl font-bold text-foreground">Tasks</h1>
+        <p className="text-muted-foreground mt-1">View and manage all your tasks across projects</p>
       </div>
       <div className="text-center py-12">
-        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
-        <p className="mt-4 text-gray-600">Loading...</p>
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
+        <p className="mt-4 text-muted-foreground">Loading...</p>
       </div>
     </div>
   );

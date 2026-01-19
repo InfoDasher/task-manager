@@ -13,6 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ProjectStatusBadge, TaskStatusBadge, TaskPriorityBadge } from "@/components/ui/badge";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { formatDate } from "@/lib/utils";
+import { KanbanBoard } from "@/components/kanban/kanban-board";
 
 interface Task {
   id: string;
@@ -48,6 +49,7 @@ export default function ProjectDetailPage() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [showNewTask, setShowNewTask] = useState(false);
+  const [viewMode, setViewMode] = useState<"list" | "kanban">("list");
   const [editName, setEditName] = useState("");
   const [editDescription, setEditDescription] = useState("");
   const [editStatus, setEditStatus] = useState("");
@@ -165,8 +167,8 @@ export default function ProjectDetailPage() {
   if (isLoading) {
     return (
       <div className="text-center py-12">
-        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
-        <p className="mt-4 text-gray-600">Loading project...</p>
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
+        <p className="mt-4 text-muted-foreground">Loading project...</p>
       </div>
     );
   }
@@ -175,7 +177,7 @@ export default function ProjectDetailPage() {
     return (
       <Card>
         <CardContent className="py-12 text-center">
-          <p className="text-red-600 mb-4">Project not found or failed to load.</p>
+          <p className="text-destructive mb-4">Project not found or failed to load.</p>
           <Link href="/dashboard/projects">
             <Button variant="outline">Back to Projects</Button>
           </Link>
@@ -202,7 +204,7 @@ export default function ProjectDetailPage() {
 
       {/* Project Overview */}
       <Card>
-        <CardHeader className="border-b border-gray-100">
+        <CardHeader className="border-b border-card-border">
           <div className="flex items-start justify-between">
             {isEditing ? (
               <div className="space-y-4 flex-1 mr-4">
@@ -221,12 +223,12 @@ export default function ProjectDetailPage() {
             ) : (
               <div>
                 <div className="flex items-center gap-3">
-                  <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">Project</span>
+                  <span className="inline-flex items-center rounded-full bg-[var(--badge-blue-bg)] px-2.5 py-0.5 text-xs font-medium text-[var(--badge-blue-text)]">Project</span>
                   <ProjectStatusBadge status={project.status} />
                 </div>
-                <CardTitle className="mt-2 text-2xl text-gray-900 font-bold">{project.name}</CardTitle>
-                <CardDescription className="mt-2 text-gray-600">{project.description || "No description"}</CardDescription>
-                <p className="text-sm text-gray-500 mt-3">
+                <CardTitle className="mt-2 text-2xl text-foreground font-bold">{project.name}</CardTitle>
+                <CardDescription className="mt-2 text-muted-foreground">{project.description || "No description"}</CardDescription>
+                <p className="text-sm text-muted-foreground mt-3">
                   Created {formatDate(project.createdAt)} • Updated {formatDate(project.updatedAt)}
                 </p>
               </div>
@@ -256,17 +258,54 @@ export default function ProjectDetailPage() {
         </CardHeader>
         <CardContent className="pt-4">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-600">
-              <span className="text-gray-500">Tasks:</span>
-              <span className="ml-1 font-semibold text-gray-900">{project.tasks.length}</span>
+            <div className="text-sm text-muted-foreground">
+              <span className="text-muted-foreground">Tasks:</span>
+              <span className="ml-1 font-semibold text-foreground">{project.tasks.length}</span>
             </div>
             <Button onClick={() => setShowNewTask(true)}>Add Task</Button>
           </div>
         </CardContent>
       </Card>
 
-      {/* Tasks List Header */}
-      {project.tasks.length > 0 && <h3 className="text-lg font-semibold text-gray-900">Tasks</h3>}
+      {/* Tasks List Header with View Toggle */}
+      {project.tasks.length > 0 && (
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-foreground">Tasks</h3>
+          <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+            <button
+              onClick={() => setViewMode("list")}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+                viewMode === "list" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <span className="flex items-center gap-1.5">
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                </svg>
+                List
+              </span>
+            </button>
+            <button
+              onClick={() => setViewMode("kanban")}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+                viewMode === "kanban" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <span className="flex items-center gap-1.5">
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"
+                  />
+                </svg>
+                Kanban
+              </span>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* New Task Form */}
       {showNewTask && (
@@ -311,11 +350,13 @@ export default function ProjectDetailPage() {
         </Card>
       )}
 
-      {/* Tasks List */}
+      {/* Tasks List / Kanban View */}
       {project.tasks.length === 0 ? (
         <Card>
-          <CardContent className="py-12 text-center text-gray-600">No tasks yet. Add your first task to get started!</CardContent>
+          <CardContent className="py-12 text-center text-muted-foreground">No tasks yet. Add your first task to get started!</CardContent>
         </Card>
+      ) : viewMode === "kanban" ? (
+        <KanbanBoard tasks={project.tasks} projectId={projectId} />
       ) : (
         <div className="space-y-3">
           {project.tasks.map((task) => (
@@ -341,13 +382,13 @@ function TaskCard({ task, onDelete, isDeleting }: { task: Task; onDelete: () => 
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <Link href={`/dashboard/tasks/${task.id}`}>
-                <span className="font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">{task.title}</span>
+                <span className="font-semibold text-foreground hover:text-primary cursor-pointer">{task.title}</span>
               </Link>
               <TaskStatusBadge status={task.status} />
               <TaskPriorityBadge priority={task.priority} />
             </div>
-            {task.description && <p className="text-sm text-gray-600 line-clamp-2">{task.description}</p>}
-            <p className="text-xs text-gray-500 mt-2">
+            {task.description && <p className="text-sm text-muted-foreground line-clamp-2">{task.description}</p>}
+            <p className="text-xs text-muted-foreground mt-2">
               Created {formatDate(task.createdAt)}
               {task.dueDate && ` • Due ${formatDate(task.dueDate)}`}
             </p>
