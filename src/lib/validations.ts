@@ -37,7 +37,7 @@ export const projectQuerySchema = z.object({
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().max(100).default(10),
   search: z.string().optional(),
-  status: projectStatusEnum.optional(),
+  status: projectStatusEnum.optional().or(z.literal("")),
   sortBy: z.enum(["createdAt", "updatedAt", "name"]).default("createdAt"),
   sortOrder: z.enum(["asc", "desc"]).default("desc"),
 });
@@ -70,9 +70,9 @@ export const taskQuerySchema = z.object({
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().max(100).default(10),
   search: z.string().optional(),
-  status: taskStatusEnum.optional(),
-  priority: taskPriorityEnum.optional(),
-  projectId: z.string().cuid().optional(),
+  status: taskStatusEnum.optional().or(z.literal("")),
+  priority: taskPriorityEnum.optional().or(z.literal("")),
+  projectId: z.string().cuid().optional().or(z.literal("")),
   sortBy: z.enum(["createdAt", "updatedAt", "title", "dueDate", "priority"]).default("createdAt"),
   sortOrder: z.enum(["asc", "desc"]).default("desc"),
 });
