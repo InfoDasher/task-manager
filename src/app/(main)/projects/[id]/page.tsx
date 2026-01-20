@@ -14,7 +14,8 @@ import { ProjectStatusBadge, TaskStatusBadge, TaskPriorityBadge } from "@/compon
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { formatDate } from "@/lib/utils";
 import { KanbanBoard } from "@/components/kanban/kanban-board";
-import { List, Columns3, Pencil, Trash2, Save, X, Plus, ArrowLeft, ExternalLink } from "lucide-react";
+import { TaskDetailSidebar } from "@/components/tasks/task-detail-sidebar";
+import { List, Columns3, Pencil, Trash2, Save, X, Plus, ArrowLeft, Eye } from "lucide-react";
 
 interface Task {
   id: string;
@@ -75,6 +76,7 @@ export default function ProjectDetailPage() {
   const [newTaskPriority, setNewTaskPriority] = useState("MEDIUM");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deletingTaskId, setDeletingTaskId] = useState<string | null>(null);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
 
   const { data, isLoading, error } = useQuery<ProjectResponse>({
     queryKey: ["project", projectId],
@@ -386,11 +388,11 @@ export default function ProjectDetailPage() {
           <CardContent className="py-12 text-center text-muted-foreground">No tasks yet. Add your first task to get started!</CardContent>
         </Card>
       ) : viewMode === "kanban" ? (
-        <KanbanBoard tasks={project.tasks} projectId={projectId} />
+        <KanbanBoard tasks={project.tasks} projectId={projectId} onTaskClick={(taskId) => setSelectedTaskId(taskId)} />
       ) : (
         <div className="space-y-3">
           {project.tasks.map((task) => (
-            <TaskCard key={task.id} task={task} onDelete={() => deleteTaskMutation.mutate(task.id)} isDeleting={deletingTaskId === task.id} />
+            <TaskCard key={task.id} task={task} onDelete={() => deleteTaskMutation.mutate(task.id)} isDeleting={deletingTaskId === task.id} onView={() => setSelectedTaskId(task.id)} />
           ))}
         </div>
       )}
@@ -403,20 +405,23 @@ export default function ProjectDetailPage() {
           </Button>
         </Link>
       </div>
+
+      {/* Task Detail Sidebar */}
+      {selectedTaskId && <TaskDetailSidebar taskId={selectedTaskId} onClose={() => setSelectedTaskId(null)} />}
     </div>
   );
 }
 
-function TaskCard({ task, onDelete, isDeleting }: { task: Task; onDelete: () => void; isDeleting: boolean }) {
+function TaskCard({ task, onDelete, isDeleting, onView }: { task: Task; onDelete: () => void; isDeleting: boolean; onView: () => void }) {
   return (
     <Card>
       <CardContent className="py-4">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
-              <Link href={`/tasks/${task.id}`}>
-                <span className="font-medium text-foreground hover:text-primary cursor-pointer">{task.title}</span>
-              </Link>
+              <span className="font-medium text-foreground hover:text-primary cursor-pointer" onClick={onView}>
+                {task.title}
+              </span>
               <TaskStatusBadge status={task.status} />
               <TaskPriorityBadge priority={task.priority} />
             </div>
@@ -427,12 +432,10 @@ function TaskCard({ task, onDelete, isDeleting }: { task: Task; onDelete: () => 
             </p>
           </div>
           <div className="flex gap-2 ml-4">
-            <Link href={`/tasks/${task.id}`}>
-              <Button variant="outline" size="sm">
-                <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-                View
-              </Button>
-            </Link>
+            <Button variant="outline" size="sm" onClick={onView}>
+              <Eye className="h-3.5 w-3.5 mr-1.5" />
+              View
+            </Button>
             <Button variant="destructive" size="sm" onClick={onDelete} isLoading={isDeleting}>
               <Trash2 className="h-3.5 w-3.5 mr-1.5" />
               Delete

@@ -11,7 +11,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TaskStatusBadge, TaskPriorityBadge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
 import { KanbanBoard } from "@/components/kanban/kanban-board";
-import { FolderOpen, Circle, Loader, CheckCircle, ChevronRight, List, Columns3, Search, ExternalLink } from "lucide-react";
+import { TaskDetailSidebar } from "@/components/tasks/task-detail-sidebar";
+import { FolderOpen, Circle, Loader, CheckCircle, ChevronRight, List, Columns3, Search, Eye } from "lucide-react";
 
 interface Task {
   id: string;
@@ -45,6 +46,7 @@ function TasksContent() {
   const [projectFilter, setProjectFilter] = useState("");
   const [timeFilter, setTimeFilter] = useState<TimeFilter>("all");
   const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
 
   // Fetch all tasks
   const { data: tasksData, isLoading: tasksLoading } = useQuery({
@@ -335,13 +337,12 @@ function TasksContent() {
                       {tasks.map((task) => (
                         <div
                           key={task.id}
-                          className="flex items-start justify-between p-3 rounded-lg border border-card-border border-l-4 border-l-primary hover:bg-accent hover:border-card-border-hover hover:border-l-primary transition-all"
+                          onClick={() => setSelectedTaskId(task.id)}
+                          className="flex items-start justify-between p-3 rounded-lg border border-card-border border-l-4 border-l-primary hover:bg-accent hover:border-card-border-hover hover:border-l-primary transition-all cursor-pointer"
                         >
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <Link href={`/tasks/${task.id}`}>
-                                <span className="font-medium text-foreground hover:text-primary cursor-pointer">{task.title}</span>
-                              </Link>
+                              <span className="font-medium text-foreground">{task.title}</span>
                               <TaskStatusBadge status={task.status} />
                               <TaskPriorityBadge priority={task.priority} />
                             </div>
@@ -351,12 +352,18 @@ function TasksContent() {
                               {task.dueDate && <span className="text-muted-foreground">Due {formatDate(task.dueDate)}</span>}
                             </div>
                           </div>
-                          <Link href={`/tasks/${task.id}`} className="ml-3 shrink-0">
-                            <Button variant="outline" size="sm">
-                              <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-                              View
-                            </Button>
-                          </Link>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="ml-3 shrink-0"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedTaskId(task.id);
+                            }}
+                          >
+                            <Eye className="h-3.5 w-3.5 mr-1.5" />
+                            View
+                          </Button>
                         </div>
                       ))}
                     </div>
@@ -375,11 +382,14 @@ function TasksContent() {
                 <p className="text-muted-foreground mb-4">No tasks found matching your filters.</p>
               </div>
             ) : (
-              <KanbanBoard tasks={filteredTasks as any} projectId="all" />
+              <KanbanBoard tasks={filteredTasks as any} projectId="all" onTaskClick={(taskId) => setSelectedTaskId(taskId)} />
             )}
           </CardContent>
         </Card>
       )}
+
+      {/* Task Detail Sidebar */}
+      {selectedTaskId && <TaskDetailSidebar taskId={selectedTaskId} onClose={() => setSelectedTaskId(null)} />}
     </div>
   );
 }

@@ -27,6 +27,7 @@ interface Task {
 interface KanbanBoardProps {
   tasks: Task[];
   projectId: string;
+  onTaskClick?: (taskId: string) => void;
 }
 
 interface Column {
@@ -41,7 +42,7 @@ const columns: Column[] = [
   { id: "DONE", title: "Done", dotColor: "bg-green-500" },
 ];
 
-export function KanbanBoard({ tasks, projectId }: KanbanBoardProps) {
+export function KanbanBoard({ tasks, projectId, onTaskClick }: KanbanBoardProps) {
   const queryClient = useQueryClient();
   const [localTasks, setLocalTasks] = useState<Task[]>(tasks);
   const [error, setError] = useState<string | null>(null);
@@ -172,7 +173,7 @@ export function KanbanBoard({ tasks, projectId }: KanbanBoardProps) {
                             {...provided.dragHandleProps}
                             className={`transition-all duration-200 ${snapshot.isDragging ? "rotate-2 scale-105" : ""} ${pendingTaskId === task.id ? "opacity-70 animate-pulse" : ""}`}
                           >
-                            <KanbanCard task={task} isPending={pendingTaskId === task.id} />
+                            <KanbanCard task={task} isPending={pendingTaskId === task.id} onTaskClick={onTaskClick} />
                           </div>
                         )}
                       </Draggable>
@@ -197,23 +198,27 @@ export function KanbanBoard({ tasks, projectId }: KanbanBoardProps) {
   );
 }
 
-function KanbanCard({ task, isPending }: { task: Task; isPending: boolean }) {
+function KanbanCard({ task, isPending, onTaskClick }: { task: Task; isPending: boolean; onTaskClick?: (taskId: string) => void }) {
   const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && task.status !== "DONE";
 
+  const handleClick = () => {
+    if (onTaskClick) {
+      onTaskClick(task.id);
+    }
+  };
+
   return (
-    <Card className={`cursor-grab active:cursor-grabbing shadow-sm hover:shadow-md transition-shadow ${isPending ? "border-primary/50" : ""}`}>
+    <Card className={`cursor-grab active:cursor-grabbing shadow-sm hover:shadow-md transition-shadow ${isPending ? "border-primary/50" : ""}`} onClick={handleClick}>
       <CardContent className="p-3 space-y-2">
         {/* Project indicator */}
         {task.project && (
-          <Link href={`/projects/${task.project.id}`} className="flex items-center gap-1">
+          <Link href={`/projects/${task.project.id}`} className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
             <FolderOpen className="h-3 w-3 text-muted-foreground" />
             <span className="text-xs text-muted-foreground hover:text-primary transition-colors">{task.project.name}</span>
           </Link>
         )}
 
-        <Link href={`/tasks/${task.id}`}>
-          <span className="font-medium text-foreground hover:text-primary transition-colors line-clamp-2 block">{task.title}</span>
-        </Link>
+        <span className="font-medium text-foreground hover:text-primary transition-colors line-clamp-2 block cursor-pointer">{task.title}</span>
 
         {task.description && <p className="text-xs text-muted-foreground line-clamp-2">{task.description}</p>}
 
