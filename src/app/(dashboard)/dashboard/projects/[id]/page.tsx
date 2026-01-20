@@ -60,6 +60,7 @@ export default function ProjectDetailPage() {
   const [newTaskStatus, setNewTaskStatus] = useState("TODO");
   const [newTaskPriority, setNewTaskPriority] = useState("MEDIUM");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deletingTaskId, setDeletingTaskId] = useState<string | null>(null);
 
   const { data, isLoading, error } = useQuery<ProjectResponse>({
     queryKey: ["project", projectId],
@@ -119,12 +120,17 @@ export default function ProjectDetailPage() {
 
   const deleteTaskMutation = useMutation({
     mutationFn: async (taskId: string) => {
+      setDeletingTaskId(taskId);
       const res = await fetch(`/api/tasks/${taskId}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete task");
       return res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project", projectId] });
+      setDeletingTaskId(null);
+    },
+    onError: () => {
+      setDeletingTaskId(null);
     },
   });
 
@@ -360,7 +366,7 @@ export default function ProjectDetailPage() {
       ) : (
         <div className="space-y-3">
           {project.tasks.map((task) => (
-            <TaskCard key={task.id} task={task} onDelete={() => deleteTaskMutation.mutate(task.id)} isDeleting={deleteTaskMutation.isPending} />
+            <TaskCard key={task.id} task={task} onDelete={() => deleteTaskMutation.mutate(task.id)} isDeleting={deletingTaskId === task.id} />
           ))}
         </div>
       )}
