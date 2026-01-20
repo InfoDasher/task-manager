@@ -1,6 +1,6 @@
 # Task Manager - Full-Stack Application
 
-A modern, full-stack task management application built with Next.js 14, Prisma, PostgreSQL, and NextAuth.js.
+A modern, full-stack task management application built with Next.js 15, Prisma, PostgreSQL, and NextAuth.js.
 
 > 🌐 **Live Demo**: [https://task-manager-infodasher.vercel.app](https://task-manager-infodasher.vercel.app)
 
@@ -20,10 +20,12 @@ Password: password123
 - **Tasks Management**: Full CRUD operations for tasks within projects
 - **Kanban Board**: Drag-and-drop task management with status columns (bonus)
 - **Dark Mode**: Theme toggle with system preference support (bonus)
+- **URL State Persistence**: View preferences survive page refresh
 - **Search & Filtering**: Search projects/tasks with status and priority filters
 - **Pagination**: Efficient data loading with paginated API responses
 - **Unit Tests**: Validation and component tests with Vitest (bonus)
 - **API Documentation**: Comprehensive endpoint documentation (bonus)
+- **Docker Support**: Containerized deployment ready (bonus)
 - **Responsive Design**: Modern UI built with Tailwind CSS
 - **Type Safety**: Full TypeScript implementation with Zod validation
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 function getRelativeTime(dateString: string): string {
   const date = new Date(dateString);
@@ -19,12 +19,17 @@ function getRelativeTime(dateString: string): string {
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-export function Footer() {
-  const [mounted, setMounted] = useState(false);
+// Use useSyncExternalStore for hydration-safe mounting detection
+function useIsMounted() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
+}
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+export function Footer() {
+  const mounted = useIsMounted();
 
   // Git info from build time environment variables
   const branch = process.env.NEXT_PUBLIC_GIT_BRANCH || "main";
