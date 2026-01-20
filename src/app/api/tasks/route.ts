@@ -18,7 +18,8 @@ export async function GET(request: Request) {
     // Validate query parameters
     const parsed = taskQuerySchema.safeParse(queryParams);
     if (!parsed.success) {
-      return NextResponse.json(errorResponse("Invalid query parameters"), { status: 400 });
+      console.error("Task query validation failed:", JSON.stringify(parsed.error.issues));
+      return NextResponse.json(errorResponse("Invalid query parameters", parsed.error.flatten().fieldErrors as Record<string, string[]>), { status: 400 });
     }
 
     const { page, limit, search, status, priority, projectId, sortBy, sortOrder } = parsed.data;
