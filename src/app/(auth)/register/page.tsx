@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { EyeIcon, EyeSlashIcon } from "@/components/ui/icons";
+import { Code } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -61,7 +62,7 @@ export default function RegisterPage() {
       if (signInResult?.error) {
         setError("Account created but failed to sign in. Please try logging in.");
       } else {
-        router.push("/dashboard");
+        router.push("/tasks");
         router.refresh();
       }
     } catch {
@@ -79,9 +80,7 @@ export default function RegisterPage() {
         <div className="bg-card border border-card-border rounded-lg p-4 text-left">
           <div className="flex items-start gap-3">
             <div className="flex-shrink-0 mt-0.5">
-              <svg className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-              </svg>
+              <Code className="h-4 w-4 text-primary" />
             </div>
             <div>
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Technical Assignment</p>

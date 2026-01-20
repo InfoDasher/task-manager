@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Plus, X } from "lucide-react";
 
 export default function NewProjectPage() {
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function NewProjectPage() {
         return;
       }
 
-      router.push(`/dashboard/projects/${data.data.id}`);
+      router.push(`/projects/${data.data.id}`);
       router.refresh();
     } catch {
       setError("An unexpected error occurred");
@@ -54,8 +55,8 @@ export default function NewProjectPage() {
     <div className="max-w-2xl mx-auto">
       <Card>
         <CardHeader>
-          <CardTitle>Create New Project</CardTitle>
-          <CardDescription>Add a new project to organize your tasks</CardDescription>
+          <CardTitle className="text-2xl font-bold">Create New Project</CardTitle>
+          <CardDescription className="text-sm">Add a new project to organize your tasks</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
@@ -89,9 +90,11 @@ export default function NewProjectPage() {
             </div>
             <div className="flex gap-4 pt-4">
               <Button type="submit" isLoading={isLoading}>
+                <Plus className="h-4 w-4 mr-1.5" />
                 Create Project
               </Button>
               <Button type="button" variant="outline" onClick={() => router.back()}>
+                <X className="h-4 w-4 mr-1.5" />
                 Cancel
               </Button>
             </div>

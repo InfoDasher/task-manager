@@ -10,9 +10,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { TaskStatusBadge, TaskPriorityBadge } from "@/components/ui/badge";
+import { TaskStatusBadge, TaskPriorityBadge, ProjectStatusBadge } from "@/components/ui/badge";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
-import { formatDate, formatDateTime } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
+import { ArrowLeft, Pencil, Trash2, Save, X, FolderOpen } from "lucide-react";
 
 interface Task {
   id: string;
@@ -59,17 +60,18 @@ export default function TaskDetailPage() {
   });
 
   const updateTaskMutation = useMutation({
-    mutationFn: async (updateData: { title?: string; description?: string | null; status?: string; priority?: string; dueDate?: string | null }) => {
+    mutationFn: async (data: { title?: string; description?: string; status?: string; priority?: string; dueDate?: string | null }) => {
       const res = await fetch(`/api/tasks/${taskId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updateData),
+        body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Failed to update task");
       return res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["task", taskId] });
+      queryClient.invalidateQueries({ queryKey: ["all-tasks"] });
       setIsEditing(false);
     },
   });
@@ -81,11 +83,8 @@ export default function TaskDetailPage() {
       return res.json();
     },
     onSuccess: () => {
-      if (data?.data?.project?.id) {
-        router.push(`/dashboard/projects/${data.data.project.id}`);
-      } else {
-        router.push("/dashboard/tasks");
-      }
+      queryClient.invalidateQueries({ queryKey: ["all-tasks"] });
+      router.push("/tasks");
     },
   });
 
@@ -95,7 +94,7 @@ export default function TaskDetailPage() {
       setEditDescription(data.data.description || "");
       setEditStatus(data.data.status);
       setEditPriority(data.data.priority);
-      setEditDueDate(data.data.dueDate ? new Date(data.data.dueDate).toISOString().split("T")[0] : "");
+      setEditDueDate(data.data.dueDate ? data.data.dueDate.split("T")[0] : "");
       setIsEditing(true);
     }
   };
@@ -103,10 +102,10 @@ export default function TaskDetailPage() {
   const handleSaveEdit = () => {
     updateTaskMutation.mutate({
       title: editTitle,
-      description: editDescription || null,
+      description: editDescription || undefined,
       status: editStatus,
       priority: editPriority,
-      dueDate: editDueDate ? new Date(editDueDate).toISOString() : null,
+      dueDate: editDueDate || null,
     });
   };
 
@@ -117,10 +116,6 @@ export default function TaskDetailPage() {
   const confirmDelete = () => {
     deleteTaskMutation.mutate();
     setShowDeleteConfirm(false);
-  };
-
-  const handleQuickStatusChange = (newStatus: string) => {
-    updateTaskMutation.mutate({ status: newStatus });
   };
 
   if (isLoading) {
@@ -137,7 +132,7 @@ export default function TaskDetailPage() {
       <Card>
         <CardContent className="py-12 text-center">
           <p className="text-destructive mb-4">Task not found or failed to load.</p>
-          <Link href="/dashboard/tasks">
+          <Link href="/tasks">
             <Button variant="outline">Back to Tasks</Button>
           </Link>
         </CardContent>
@@ -148,7 +143,7 @@ export default function TaskDetailPage() {
   const task = data.data;
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="space-y-6">
       {/* Delete Confirmation Dialog */}
       <ConfirmDialog
         open={showDeleteConfirm}
@@ -161,26 +156,14 @@ export default function TaskDetailPage() {
         isLoading={deleteTaskMutation.isPending}
       />
 
-      {/* Breadcrumb Navigation */}
-      <nav className="flex items-center text-sm text-muted-foreground">
-        <Link href="/dashboard/projects" className="hover:text-primary">
-          Projects
-        </Link>
-        <span className="mx-2">/</span>
-        <Link href={`/dashboard/projects/${task.project.id}`} className="hover:text-primary">
-          {task.project.name}
-        </Link>
-        <span className="mx-2">/</span>
-        <span className="text-foreground font-medium">{task.title}</span>
-      </nav>
-
+      {/* Task Detail Card */}
       <Card>
-        <CardHeader>
+        <CardHeader className="border-b border-card-border">
           <div className="flex items-start justify-between">
             {isEditing ? (
               <div className="space-y-4 flex-1 mr-4">
                 <Input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} placeholder="Task title" />
-                <Textarea value={editDescription} onChange={(e) => setEditDescription(e.target.value)} placeholder="Task description" rows={4} />
+                <Textarea value={editDescription} onChange={(e) => setEditDescription(e.target.value)} placeholder="Task description" rows={3} />
                 <div className="grid grid-cols-2 gap-4">
                   <Select
                     value={editStatus}
@@ -201,39 +184,47 @@ export default function TaskDetailPage() {
                     ]}
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Due Date</label>
+                <div>
+                  <label className="block text-sm font-medium text-muted-foreground mb-1">Due Date</label>
                   <Input type="date" value={editDueDate} onChange={(e) => setEditDueDate(e.target.value)} />
                 </div>
               </div>
             ) : (
               <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <CardTitle className="text-2xl text-foreground font-bold">{task.title}</CardTitle>
-                </div>
-                <div className="flex items-center gap-2 mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="inline-flex items-center rounded-full bg-[var(--badge-purple-bg)] px-2.5 py-0.5 text-xs font-medium text-[var(--badge-purple-text)]">Task</span>
                   <TaskStatusBadge status={task.status} />
                   <TaskPriorityBadge priority={task.priority} />
                 </div>
-                <CardDescription className="text-base text-muted-foreground">{task.description || "No description"}</CardDescription>
+                <CardTitle className="mt-2 text-2xl text-foreground font-bold">{task.title}</CardTitle>
+                <CardDescription className="mt-2 text-muted-foreground">{task.description || "No description"}</CardDescription>
+                <div className="flex items-center gap-4 text-sm text-muted-foreground mt-3">
+                  <span>Created {formatDate(task.createdAt)}</span>
+                  <span>Updated {formatDate(task.updatedAt)}</span>
+                  {task.dueDate && <span>Due {formatDate(task.dueDate)}</span>}
+                </div>
               </div>
             )}
             <div className="flex gap-2">
               {isEditing ? (
                 <>
                   <Button onClick={handleSaveEdit} isLoading={updateTaskMutation.isPending}>
+                    <Save className="h-4 w-4 mr-1.5" />
                     Save
                   </Button>
                   <Button variant="outline" onClick={() => setIsEditing(false)}>
+                    <X className="h-4 w-4 mr-1.5" />
                     Cancel
                   </Button>
                 </>
               ) : (
                 <>
                   <Button variant="outline" onClick={handleStartEdit}>
+                    <Pencil className="h-4 w-4 mr-1.5" />
                     Edit
                   </Button>
                   <Button variant="destructive" onClick={handleDelete} isLoading={deleteTaskMutation.isPending}>
+                    <Trash2 className="h-4 w-4 mr-1.5" />
                     Delete
                   </Button>
                 </>
@@ -241,57 +232,29 @@ export default function TaskDetailPage() {
             </div>
           </div>
         </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Quick Status Change */}
-          {!isEditing && (
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Quick Status Update</label>
-              <div className="flex gap-2">
-                {["TODO", "IN_PROGRESS", "DONE"].map((status) => (
-                  <Button
-                    key={status}
-                    variant={task.status === status ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => handleQuickStatusChange(status)}
-                    disabled={task.status === status || updateTaskMutation.isPending}
-                  >
-                    {status === "TODO" ? "To Do" : status === "IN_PROGRESS" ? "In Progress" : "Done"}
-                  </Button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Task Details */}
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <span className="text-muted-foreground font-medium">Project:</span>
-              <Link href={`/dashboard/projects/${task.project.id}`} className="ml-2 text-primary hover:underline">
-                {task.project.name}
-              </Link>
-            </div>
-            <div>
-              <span className="text-muted-foreground font-medium">Due Date:</span>
-              <span className="ml-2 text-foreground">{task.dueDate ? formatDate(task.dueDate) : "Not set"}</span>
-            </div>
-            <div>
-              <span className="text-muted-foreground font-medium">Created:</span>
-              <span className="ml-2 text-foreground">{formatDateTime(task.createdAt)}</span>
-            </div>
-            <div>
-              <span className="text-muted-foreground font-medium">Updated:</span>
-              <span className="ml-2 text-foreground">{formatDateTime(task.updatedAt)}</span>
-            </div>
+        <CardContent className="pt-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Project:</span>
+            <Link href={`/projects/${task.project.id}`} className="flex items-center gap-2 hover:text-primary">
+              <span className="font-medium">{task.project.name}</span>
+              <ProjectStatusBadge status={task.project.status} />
+            </Link>
           </div>
         </CardContent>
       </Card>
 
       <div className="flex gap-4">
-        <Link href={`/dashboard/projects/${task.project.id}`}>
-          <Button variant="outline">← Back to Project</Button>
+        <Link href="/tasks">
+          <Button variant="outline">
+            <ArrowLeft className="h-4 w-4 mr-1.5" />
+            Back to Tasks
+          </Button>
         </Link>
-        <Link href="/dashboard/tasks">
-          <Button variant="outline">← All Tasks</Button>
+        <Link href={`/projects/${task.project.id}`}>
+          <Button variant="outline">
+            <FolderOpen className="h-4 w-4 mr-1.5" />
+            View Project
+          </Button>
         </Link>
       </div>
     </div>

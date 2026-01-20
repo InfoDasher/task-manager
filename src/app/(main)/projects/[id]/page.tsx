@@ -14,6 +14,7 @@ import { ProjectStatusBadge, TaskStatusBadge, TaskPriorityBadge } from "@/compon
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { formatDate } from "@/lib/utils";
 import { KanbanBoard } from "@/components/kanban/kanban-board";
+import { List, Columns3, Pencil, Trash2, Save, X, Plus, ArrowLeft, ExternalLink } from "lucide-react";
 
 interface Task {
   id: string;
@@ -107,7 +108,7 @@ export default function ProjectDetailPage() {
       return res.json();
     },
     onSuccess: () => {
-      router.push("/dashboard/projects");
+      router.push("/projects");
     },
   });
 
@@ -204,8 +205,11 @@ export default function ProjectDetailPage() {
       <Card>
         <CardContent className="py-12 text-center">
           <p className="text-destructive mb-4">Project not found or failed to load.</p>
-          <Link href="/dashboard/projects">
-            <Button variant="outline">Back to Projects</Button>
+          <Link href="/projects">
+            <Button variant="outline">
+              <ArrowLeft className="h-4 w-4 mr-1.5" />
+              Back to Projects
+            </Button>
           </Link>
         </CardContent>
       </Card>
@@ -263,18 +267,22 @@ export default function ProjectDetailPage() {
               {isEditing ? (
                 <>
                   <Button onClick={handleSaveEdit} isLoading={updateProjectMutation.isPending}>
+                    <Save className="h-4 w-4 mr-1.5" />
                     Save
                   </Button>
                   <Button variant="outline" onClick={() => setIsEditing(false)}>
+                    <X className="h-4 w-4 mr-1.5" />
                     Cancel
                   </Button>
                 </>
               ) : (
                 <>
                   <Button variant="outline" onClick={handleStartEdit}>
+                    <Pencil className="h-4 w-4 mr-1.5" />
                     Edit
                   </Button>
                   <Button variant="destructive" onClick={handleDelete} isLoading={deleteProjectMutation.isPending}>
+                    <Trash2 className="h-4 w-4 mr-1.5" />
                     Delete
                   </Button>
                 </>
@@ -288,7 +296,10 @@ export default function ProjectDetailPage() {
               <span className="text-muted-foreground">Tasks:</span>
               <span className="ml-1 font-semibold text-foreground">{project.tasks.length}</span>
             </div>
-            <Button onClick={() => setShowNewTask(true)}>Add Task</Button>
+            <Button onClick={() => setShowNewTask(true)}>
+              <Plus className="h-4 w-4 mr-1.5" />
+              Add Task
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -305,9 +316,7 @@ export default function ProjectDetailPage() {
               }`}
             >
               <span className="flex items-center gap-1.5">
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                </svg>
+                <List className="h-4 w-4" />
                 List
               </span>
             </button>
@@ -318,14 +327,7 @@ export default function ProjectDetailPage() {
               }`}
             >
               <span className="flex items-center gap-1.5">
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"
-                  />
-                </svg>
+                <Columns3 className="h-4 w-4" />
                 Kanban
               </span>
             </button>
@@ -365,9 +367,11 @@ export default function ProjectDetailPage() {
               </div>
               <div className="flex gap-2">
                 <Button type="submit" isLoading={createTaskMutation.isPending}>
+                  <Plus className="h-4 w-4 mr-1.5" />
                   Create Task
                 </Button>
                 <Button type="button" variant="outline" onClick={() => setShowNewTask(false)}>
+                  <X className="h-4 w-4 mr-1.5" />
                   Cancel
                 </Button>
               </div>
@@ -392,8 +396,11 @@ export default function ProjectDetailPage() {
       )}
 
       <div className="pt-4">
-        <Link href="/dashboard/projects">
-          <Button variant="outline">← Back to Projects</Button>
+        <Link href="/projects">
+          <Button variant="outline">
+            <ArrowLeft className="h-4 w-4 mr-1.5" />
+            Back to Projects
+          </Button>
         </Link>
       </div>
     </div>
@@ -407,25 +414,27 @@ function TaskCard({ task, onDelete, isDeleting }: { task: Task; onDelete: () => 
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
-              <Link href={`/dashboard/tasks/${task.id}`}>
-                <span className="font-semibold text-foreground hover:text-primary cursor-pointer">{task.title}</span>
+              <Link href={`/tasks/${task.id}`}>
+                <span className="font-medium text-foreground hover:text-primary cursor-pointer">{task.title}</span>
               </Link>
               <TaskStatusBadge status={task.status} />
               <TaskPriorityBadge priority={task.priority} />
             </div>
             {task.description && <p className="text-sm text-muted-foreground line-clamp-2">{task.description}</p>}
-            <p className="text-xs text-muted-foreground mt-2">
-              Created {formatDate(task.createdAt)}
+            <p className="text-xs text-muted-foreground/70 mt-2">
+              {formatDate(task.createdAt)}
               {task.dueDate && ` • Due ${formatDate(task.dueDate)}`}
             </p>
           </div>
           <div className="flex gap-2 ml-4">
-            <Link href={`/dashboard/tasks/${task.id}`}>
+            <Link href={`/tasks/${task.id}`}>
               <Button variant="outline" size="sm">
+                <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
                 View
               </Button>
             </Link>
             <Button variant="destructive" size="sm" onClick={onDelete} isLoading={isDeleting}>
+              <Trash2 className="h-3.5 w-3.5 mr-1.5" />
               Delete
             </Button>
           </div>

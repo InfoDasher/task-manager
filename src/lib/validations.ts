@@ -35,7 +35,7 @@ export const updateProjectSchema = z.object({
 
 export const projectQuerySchema = z.object({
   page: z.coerce.number().int().positive().default(1),
-  limit: z.coerce.number().int().positive().max(100).default(10),
+  limit: z.coerce.number().int().positive().max(1000).default(10),
   search: z.string().optional(),
   status: projectStatusEnum.optional().or(z.literal("")),
   sortBy: z.enum(["createdAt", "updatedAt", "name"]).default("createdAt"),
@@ -68,7 +68,7 @@ export const updateTaskSchema = z.object({
 
 export const taskQuerySchema = z.object({
   page: z.coerce.number().int().positive().default(1),
-  limit: z.coerce.number().int().positive().max(100).default(10),
+  limit: z.coerce.number().int().positive().max(1000).default(10),
   search: z.string().optional(),
   status: taskStatusEnum.optional().or(z.literal("")),
   priority: taskPriorityEnum.optional().or(z.literal("")),

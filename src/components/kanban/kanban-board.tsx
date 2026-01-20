@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { TaskPriorityBadge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
+import { AlertCircle, X, FolderOpen } from "lucide-react";
 
 interface Task {
   id: string;
@@ -17,6 +18,10 @@ interface Task {
   priority: TaskPriority;
   dueDate: string | null;
   createdAt: string;
+  project?: {
+    id: string;
+    name: string;
+  };
 }
 
 interface KanbanBoardProps {
@@ -66,6 +71,7 @@ export function KanbanBoard({ tasks, projectId }: KanbanBoardProps) {
       setPendingTaskId(null);
       // Invalidate to sync with server
       queryClient.invalidateQueries({ queryKey: ["project", projectId] });
+      queryClient.invalidateQueries({ queryKey: ["all-tasks"] });
     },
     onError: (err: Error) => {
       // Revert the optimistic update
@@ -128,15 +134,11 @@ export function KanbanBoard({ tasks, projectId }: KanbanBoardProps) {
       {error && (
         <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg flex items-center justify-between animate-in fade-in slide-in-from-top-2 duration-300">
           <div className="flex items-center gap-2">
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+            <AlertCircle className="h-5 w-5" />
             <span className="text-sm font-medium">{error}</span>
           </div>
           <button onClick={() => setError(null)} className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-200">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <X className="h-4 w-4" />
           </button>
         </div>
       )}
@@ -201,7 +203,15 @@ function KanbanCard({ task, isPending }: { task: Task; isPending: boolean }) {
   return (
     <Card className={`cursor-grab active:cursor-grabbing shadow-sm hover:shadow-md transition-shadow ${isPending ? "border-primary/50" : ""}`}>
       <CardContent className="p-3 space-y-2">
-        <Link href={`/dashboard/tasks/${task.id}`}>
+        {/* Project indicator */}
+        {task.project && (
+          <Link href={`/projects/${task.project.id}`} className="flex items-center gap-1">
+            <FolderOpen className="h-3 w-3 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground hover:text-primary transition-colors">{task.project.name}</span>
+          </Link>
+        )}
+
+        <Link href={`/tasks/${task.id}`}>
           <span className="font-medium text-foreground hover:text-primary transition-colors line-clamp-2 block">{task.title}</span>
         </Link>
 

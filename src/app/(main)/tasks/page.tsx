@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TaskStatusBadge, TaskPriorityBadge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
 import { KanbanBoard } from "@/components/kanban/kanban-board";
+import { FolderOpen, Circle, Loader, CheckCircle, ChevronRight, List, Columns3, Search, ExternalLink } from "lucide-react";
 
 interface Task {
   id: string;
@@ -27,12 +28,6 @@ interface Task {
   };
 }
 
-interface Project {
-  id: string;
-  name: string;
-  tasks: Task[];
-}
-
 interface DashboardStats {
   projectCount: number;
   todoCount: number;
@@ -43,7 +38,7 @@ interface DashboardStats {
 type ViewMode = "list" | "kanban";
 type TimeFilter = "today" | "week" | "all";
 
-function DemoContent() {
+function TasksContent() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
@@ -141,141 +136,123 @@ function DemoContent() {
 
   const isLoading = tasksLoading || projectsLoading;
 
+  // Get filter description for display
+  const getFilterDescription = () => {
+    const parts = [];
+    if (timeFilter === "today") parts.push("updated today");
+    else if (timeFilter === "week") parts.push("updated this week");
+    if (statusFilter) parts.push(`status: ${statusFilter.replace("_", " ").toLowerCase()}`);
+    if (priorityFilter) parts.push(`priority: ${priorityFilter.toLowerCase()}`);
+    if (projectFilter) {
+      const project = projectsData?.find((p: any) => p.id === projectFilter);
+      if (project) parts.push(`project: ${project.name}`);
+    }
+    if (search) parts.push(`matching "${search}"`);
+    return parts.length > 0 ? `Showing ${filteredTasks.length} tasks ${parts.join(", ")}` : `Showing all ${filteredTasks.length} tasks`;
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Demo Dashboard</h1>
-          <p className="text-muted-foreground mt-1">All tasks across all projects with advanced filtering</p>
+          <h1 className="text-3xl font-bold text-foreground">Tasks</h1>
+          <p className="text-muted-foreground mt-1">{getFilterDescription()}</p>
         </div>
       </div>
 
       {/* Quick Stats */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="cursor-pointer hover:shadow-md hover:border-blue-500/50 transition-all">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Projects</CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-foreground">{stats?.projectCount || 0}</div>
-          </CardContent>
-        </Card>
+      <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
+        <Link href="/projects">
+          <div className="flex items-center justify-between p-3 rounded-lg border border-card-border bg-card hover:border-primary/50 hover:bg-accent transition-all cursor-pointer group">
+            <div className="flex items-center gap-2.5">
+              <FolderOpen className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+              <span className="text-sm font-medium text-foreground">{stats?.projectCount || 0} Projects</span>
+            </div>
+            <div className="flex items-center gap-1 text-xs text-muted-foreground group-hover:text-primary transition-colors">
+              <span>View all</span>
+              <ChevronRight className="h-3 w-3" />
+            </div>
+          </div>
+        </Link>
 
-        <Card className="cursor-pointer hover:shadow-md hover:border-card-border-hover transition-all">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">To Do</CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <circle cx="12" cy="12" r="10" />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-foreground">{stats?.todoCount || 0}</div>
-          </CardContent>
-        </Card>
+        <button
+          onClick={() => setStatusFilter(statusFilter === "TODO" ? "" : "TODO")}
+          className={`group flex items-center justify-between p-3 rounded-lg border bg-card transition-all cursor-pointer text-left ${statusFilter === "TODO" ? "border-primary bg-primary/5" : "border-card-border hover:border-primary/50 hover:bg-accent"}`}
+        >
+          <div className="flex items-center gap-2.5">
+            <Circle className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+            <span className="text-sm font-medium text-foreground">{stats?.todoCount || 0} To Do</span>
+          </div>
+          <span className="text-xs text-muted-foreground group-hover:text-primary transition-colors">{statusFilter === "TODO" ? "Clear" : "Filter"}</span>
+        </button>
 
-        <Card className="cursor-pointer hover:shadow-md hover:border-yellow-500/50 transition-all">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">In Progress</CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4 text-yellow-500"
-            >
-              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-foreground">{stats?.inProgressCount || 0}</div>
-          </CardContent>
-        </Card>
+        <button
+          onClick={() => setStatusFilter(statusFilter === "IN_PROGRESS" ? "" : "IN_PROGRESS")}
+          className={`group flex items-center justify-between p-3 rounded-lg border bg-card transition-all cursor-pointer text-left ${statusFilter === "IN_PROGRESS" ? "border-primary bg-primary/5" : "border-card-border hover:border-primary/50 hover:bg-accent"}`}
+        >
+          <div className="flex items-center gap-2.5">
+            <Loader className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+            <span className="text-sm font-medium text-foreground">{stats?.inProgressCount || 0} In Progress</span>
+          </div>
+          <span className="text-xs text-muted-foreground group-hover:text-primary transition-colors">{statusFilter === "IN_PROGRESS" ? "Clear" : "Filter"}</span>
+        </button>
 
-        <Card className="cursor-pointer hover:shadow-md hover:border-green-500/50 transition-all">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Completed</CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4 text-green-500"
-            >
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-              <polyline points="22,4 12,14.01 9,11.01" />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-foreground">{stats?.doneCount || 0}</div>
-          </CardContent>
-        </Card>
+        <button
+          onClick={() => setStatusFilter(statusFilter === "DONE" ? "" : "DONE")}
+          className={`group flex items-center justify-between p-3 rounded-lg border bg-card transition-all cursor-pointer text-left ${statusFilter === "DONE" ? "border-primary bg-primary/5" : "border-card-border hover:border-primary/50 hover:bg-accent"}`}
+        >
+          <div className="flex items-center gap-2.5">
+            <CheckCircle className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+            <span className="text-sm font-medium text-foreground">{stats?.doneCount || 0} Completed</span>
+          </div>
+          <span className="text-xs text-muted-foreground group-hover:text-primary transition-colors">{statusFilter === "DONE" ? "Clear" : "Filter"}</span>
+        </button>
       </div>
 
       {/* View Toggle and Time Filters */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-muted-foreground">View:</span>
-          <div className="inline-flex rounded-lg border border-card-border p-1">
-            <Button variant={viewMode === "list" ? "default" : "ghost"} size="sm" onClick={() => setViewMode("list")} className="rounded-md">
-              <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+          <div className="inline-flex rounded-lg border border-card-border p-1 gap-1">
+            <button
+              onClick={() => setViewMode("list")}
+              className={`inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${viewMode === "list" ? "bg-primary text-white" : "text-muted-foreground hover:text-foreground hover:bg-accent"}`}
+            >
+              <List className="w-4 h-4 mr-1.5" />
               List
-            </Button>
-            <Button variant={viewMode === "kanban" ? "default" : "ghost"} size="sm" onClick={() => setViewMode("kanban")} className="rounded-md">
-              <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"
-                />
-              </svg>
+            </button>
+            <button
+              onClick={() => setViewMode("kanban")}
+              className={`inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${viewMode === "kanban" ? "bg-primary text-white" : "text-muted-foreground hover:text-foreground hover:bg-accent"}`}
+            >
+              <Columns3 className="w-4 h-4 mr-1.5" />
               Kanban
-            </Button>
+            </button>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-muted-foreground">Time:</span>
-          <div className="inline-flex rounded-lg border border-card-border p-1">
-            <Button variant={timeFilter === "today" ? "default" : "ghost"} size="sm" onClick={() => setTimeFilter("today")} className="rounded-md">
+          <div className="inline-flex rounded-lg border border-card-border p-1 gap-1">
+            <button
+              onClick={() => setTimeFilter("today")}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${timeFilter === "today" ? "bg-primary text-white" : "text-muted-foreground hover:text-foreground hover:bg-accent"}`}
+            >
               Today
-            </Button>
-            <Button variant={timeFilter === "week" ? "default" : "ghost"} size="sm" onClick={() => setTimeFilter("week")} className="rounded-md">
+            </button>
+            <button
+              onClick={() => setTimeFilter("week")}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${timeFilter === "week" ? "bg-primary text-white" : "text-muted-foreground hover:text-foreground hover:bg-accent"}`}
+            >
               This Week
-            </Button>
-            <Button variant={timeFilter === "all" ? "default" : "ghost"} size="sm" onClick={() => setTimeFilter("all")} className="rounded-md">
+            </button>
+            <button
+              onClick={() => setTimeFilter("all")}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${timeFilter === "all" ? "bg-primary text-white" : "text-muted-foreground hover:text-foreground hover:bg-accent"}`}
+            >
               All Time
-            </Button>
+            </button>
           </div>
         </div>
       </div>
@@ -284,7 +261,10 @@ function DemoContent() {
       <Card>
         <CardContent className="pt-6">
           <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto_auto]">
-            <Input placeholder="Search tasks..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full" />
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input placeholder="Search tasks..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full pl-9" />
+            </div>
             <Select
               value={projectFilter}
               onChange={(e) => setProjectFilter(e.target.value)}
@@ -343,37 +323,37 @@ function DemoContent() {
               const project = projectsData?.find((p: any) => p.id === projectId);
               return (
                 <Card key={projectId}>
-                  <CardHeader className="bg-accent/50">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-xl">
-                        <Link href={`/dashboard/projects/${projectId}`} className="hover:text-primary">
-                          📁 {project?.name || "Unknown Project"}
-                        </Link>
-                      </CardTitle>
-                      <span className="text-sm text-muted-foreground">{tasks.length} tasks</span>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="pt-4">
-                    <div className="space-y-3">
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-card-border bg-accent/30">
+                    <Link href={`/projects/${projectId}`} className="flex items-center gap-2 hover:text-primary transition-colors">
+                      <FolderOpen className="h-4 w-4 text-muted-foreground" />
+                      <span className="font-semibold text-foreground">{project?.name || "Unknown Project"}</span>
+                    </Link>
+                    <span className="text-xs text-muted-foreground bg-card px-2 py-0.5 rounded-full border border-card-border">{tasks.length}</span>
+                  </div>
+                  <CardContent className="pt-3">
+                    <div className="space-y-2">
                       {tasks.map((task) => (
-                        <div key={task.id} className="flex items-start justify-between p-3 rounded-lg border border-card-border hover:bg-accent hover:border-card-border-hover transition-all">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <Link href={`/dashboard/tasks/${task.id}`}>
-                                <span className="font-semibold text-foreground hover:text-primary cursor-pointer">{task.title}</span>
+                        <div
+                          key={task.id}
+                          className="flex items-start justify-between p-3 rounded-lg border border-card-border border-l-4 border-l-primary hover:bg-accent hover:border-card-border-hover hover:border-l-primary transition-all"
+                        >
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <Link href={`/tasks/${task.id}`}>
+                                <span className="font-medium text-foreground hover:text-primary cursor-pointer">{task.title}</span>
                               </Link>
                               <TaskStatusBadge status={task.status} />
                               <TaskPriorityBadge priority={task.priority} />
                             </div>
-                            {task.description && <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{task.description}</p>}
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              <span>Created {formatDate(task.createdAt)}</span>
-                              <span>Updated {formatDate(task.updatedAt)}</span>
-                              {task.dueDate && <span>Due {formatDate(task.dueDate)}</span>}
+                            {task.description && <p className="text-sm text-muted-foreground line-clamp-1 mt-1">{task.description}</p>}
+                            <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground/70">
+                              <span>{formatDate(task.createdAt)}</span>
+                              {task.dueDate && <span className="text-muted-foreground">Due {formatDate(task.dueDate)}</span>}
                             </div>
                           </div>
-                          <Link href={`/dashboard/tasks/${task.id}`}>
+                          <Link href={`/tasks/${task.id}`} className="ml-3 shrink-0">
                             <Button variant="outline" size="sm">
+                              <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
                               View
                             </Button>
                           </Link>
@@ -404,11 +384,11 @@ function DemoContent() {
   );
 }
 
-function DemoLoading() {
+function TasksLoading() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Demo Dashboard</h1>
+        <h1 className="text-3xl font-bold text-foreground">Tasks</h1>
         <p className="text-muted-foreground mt-1">All tasks across all projects with advanced filtering</p>
       </div>
       <div className="text-center py-12">
@@ -419,10 +399,10 @@ function DemoLoading() {
   );
 }
 
-export default function DemoPage() {
+export default function TasksPage() {
   return (
-    <Suspense fallback={<DemoLoading />}>
-      <DemoContent />
+    <Suspense fallback={<TasksLoading />}>
+      <TasksContent />
     </Suspense>
   );
 }
