@@ -18,8 +18,12 @@ Password: password123
 - **Authentication**: Secure user registration and login with NextAuth.js v5
 - **Projects Management**: Create, read, update, and delete projects
 - **Tasks Management**: Full CRUD operations for tasks within projects
+- **Kanban Board**: Drag-and-drop task management with status columns (bonus)
+- **Dark Mode**: Theme toggle with system preference support (bonus)
 - **Search & Filtering**: Search projects/tasks with status and priority filters
 - **Pagination**: Efficient data loading with paginated API responses
+- **Unit Tests**: Validation and component tests with Vitest (bonus)
+- **API Documentation**: Comprehensive endpoint documentation (bonus)
 - **Responsive Design**: Modern UI built with Tailwind CSS
 - **Type Safety**: Full TypeScript implementation with Zod validation
 
@@ -27,13 +31,16 @@ Password: password123
 
 | Layer          | Technology                   |
 | -------------- | ---------------------------- |
-| Framework      | Next.js 14 (App Router)      |
+| Framework      | Next.js 15 (App Router)      |
 | Database       | PostgreSQL (Neon compatible) |
 | ORM            | Prisma                       |
 | Authentication | NextAuth.js v5               |
 | Validation     | Zod                          |
 | Styling        | Tailwind CSS                 |
+| Theming        | next-themes                  |
+| Drag & Drop    | @hello-pangea/dnd            |
 | Data Fetching  | React Query (TanStack Query) |
+| Testing        | Vitest + Testing Library     |
 | Language       | TypeScript                   |
 
 ## 📋 Prerequisites
@@ -250,12 +257,11 @@ docker-compose up -d
 
 ### If I Had More Time
 
-- Add drag-and-drop task reordering (dnd-kit)
-- Implement optimistic UI updates for better UX
-- Add comprehensive test coverage (Vitest + Testing Library)
-- Add dark mode toggle
+- Add real-time collaborative editing with WebSockets
 - Add keyboard shortcuts for power users
-- Implement task due date reminders
+- Implement task due date reminders/notifications
+- Add user avatar uploads with S3/Cloudinary
+- Implement role-based access control for team collaboration
 
 ## 📄 License
 

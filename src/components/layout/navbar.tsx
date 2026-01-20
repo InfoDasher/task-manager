@@ -18,9 +18,10 @@ function useIsMounted() {
 }
 
 function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const mounted = useIsMounted();
 
+  // Don't render the actual icons until mounted to avoid hydration mismatch
   if (!mounted) {
     return (
       <button className="h-9 w-9 rounded-md border border-card-border bg-card flex items-center justify-center">
@@ -29,13 +30,17 @@ function ThemeToggle() {
     );
   }
 
+  // Use resolvedTheme instead of theme to handle "system" theme correctly
+  // resolvedTheme gives us the actual computed theme value (light or dark)
+  const isDark = resolvedTheme === "dark";
+
   return (
     <button
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      onClick={() => setTheme(isDark ? "light" : "dark")}
       className="h-9 w-9 rounded-md border border-card-border bg-card hover:bg-accent flex items-center justify-center transition-colors"
-      aria-label="Toggle theme"
+      aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
     >
-      {theme === "dark" ? (
+      {isDark ? (
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-5 w-5 text-foreground">
           <path
             strokeLinecap="round"
