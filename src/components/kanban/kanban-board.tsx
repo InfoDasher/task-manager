@@ -28,13 +28,14 @@ interface Column {
   id: TaskStatus;
   title: string;
   color: string;
-  bgColor: string;
+  lightBg: string;
+  darkBg: string;
 }
 
 const columns: Column[] = [
-  { id: "TODO", title: "To Do", color: "bg-gray-500", bgColor: "bg-gray-50 dark:bg-gray-900/50" },
-  { id: "IN_PROGRESS", title: "In Progress", color: "bg-yellow-500", bgColor: "bg-yellow-50 dark:bg-yellow-900/20" },
-  { id: "DONE", title: "Done", color: "bg-green-500", bgColor: "bg-green-50 dark:bg-green-900/20" },
+  { id: "TODO", title: "To Do", color: "bg-gray-500", lightBg: "bg-gray-100", darkBg: "dark:bg-gray-800/50" },
+  { id: "IN_PROGRESS", title: "In Progress", color: "bg-yellow-500", lightBg: "bg-amber-50", darkBg: "dark:bg-amber-950/30" },
+  { id: "DONE", title: "Done", color: "bg-green-500", lightBg: "bg-emerald-50", darkBg: "dark:bg-emerald-950/30" },
 ];
 
 export function KanbanBoard({ tasks, projectId }: KanbanBoardProps) {
@@ -146,12 +147,12 @@ export function KanbanBoard({ tasks, projectId }: KanbanBoardProps) {
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {columns.map((column) => (
-            <div key={column.id} className={`rounded-lg ${column.bgColor} p-4 min-h-[400px]`}>
+            <div key={column.id} className={`rounded-lg ${column.lightBg} ${column.darkBg} border border-card-border p-4 min-h-[400px]`}>
               {/* Column Header */}
               <div className="flex items-center gap-2 mb-4">
                 <div className={`w-3 h-3 rounded-full ${column.color}`} />
                 <h3 className="font-semibold text-foreground">{column.title}</h3>
-                <span className="ml-auto text-sm text-muted-foreground bg-background/80 dark:bg-gray-800/80 px-2 py-0.5 rounded-full">{getTasksByStatus(column.id).length}</span>
+                <span className="ml-auto text-sm text-muted-foreground bg-card px-2 py-0.5 rounded-full border border-card-border">{getTasksByStatus(column.id).length}</span>
               </div>
 
               {/* Droppable Area */}
