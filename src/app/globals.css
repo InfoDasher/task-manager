@@ -16,11 +16,11 @@
   /* Input colors */
   --input: #ffffff;
   --input-border: #d1d5db;
-  --input-border-focus: #1e3a5f;
+  --input-border-focus: #5865f2;
 
-  /* Primary colors - Corporate Navy with subtle indigo hint */
-  --primary: #1e3a5f;
-  --primary-hover: #152a47;
+  /* Primary colors - Vibrant indigo-blue that works in both modes */
+  --primary: #5865f2;
+  --primary-hover: #4752c4;
   --primary-foreground: #ffffff;
 
   /* Accent colors */
@@ -32,7 +32,7 @@
   --destructive-foreground: #ffffff;
 
   /* Ring/Focus colors */
-  --ring: #1e3a5f;
+  --ring: #5865f2;
   --ring-offset: #ffffff;
 
   /* Status badge colors */
@@ -44,8 +44,8 @@
   --badge-yellow-text: #854d0e;
   --badge-red-bg: #fee2e2;
   --badge-red-text: #991b1b;
-  --badge-blue-bg: #e0e7f1;
-  --badge-blue-text: #1e3a5f;
+  --badge-blue-bg: #e0e7ff;
+  --badge-blue-text: #4338ca;
 }
 
 .dark {
@@ -64,11 +64,11 @@
   /* Input colors */
   --input: #27272a;
   --input-border: #3f3f46;
-  --input-border-focus: #4a6fa5;
+  --input-border-focus: #5865f2;
 
-  /* Primary colors - Lighter navy for dark mode visibility */
-  --primary: #4a6fa5;
-  --primary-hover: #3d5d8a;
+  /* Primary colors - Same indigo-blue for consistency */
+  --primary: #5865f2;
+  --primary-hover: #6d77f7;
   --primary-foreground: #ffffff;
 
   /* Accent colors */
@@ -80,7 +80,7 @@
   --destructive-foreground: #ffffff;
 
   /* Ring/Focus colors */
-  --ring: #4a6fa5;
+  --ring: #5865f2;
   --ring-offset: #0a0a0a;
 
   /* Status badge colors - darker backgrounds for dark mode */
@@ -92,8 +92,8 @@
   --badge-yellow-text: #fef08a;
   --badge-red-bg: #7f1d1d;
   --badge-red-text: #fecaca;
-  --badge-blue-bg: #1e3a5f;
-  --badge-blue-text: #a3c1e0;
+  --badge-blue-bg: #312e81;
+  --badge-blue-text: #c7d2fe;
 }
 
 @theme inline {

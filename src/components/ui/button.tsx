@@ -9,7 +9,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ className, variant = "default", size = "default", isLoading, children, disabled, ...props }, ref) => {
   const variants = {
-    default: "bg-gradient-to-r from-[#1e3a5f] to-[#2d4a6f] text-white shadow-sm hover:from-[#152a47] hover:to-[#1e3a5f] hover:shadow focus:ring-[#1e3a5f]",
+    default: "bg-gradient-to-r from-[#5865f2] to-[#4752c4] text-white shadow-sm hover:from-[#4752c4] hover:to-[#3c45a5] hover:shadow focus:ring-[#5865f2]",
     destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-red-700 hover:shadow focus:ring-red-500",
     outline: "border border-card-border bg-card text-foreground shadow-sm hover:border-card-border-hover hover:bg-accent focus:ring-primary",
     ghost: "text-foreground hover:bg-accent focus:ring-muted",
