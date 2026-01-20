@@ -216,6 +216,11 @@ describe("Project Schemas", () => {
       const result = projectQuerySchema.safeParse({ page: -1 });
       expect(result.success).toBe(false);
     });
+
+    it("should accept empty string for status filter", () => {
+      const result = projectQuerySchema.safeParse({ status: "" });
+      expect(result.success).toBe(true);
+    });
   });
 });
 
@@ -366,6 +371,26 @@ describe("Task Schemas", () => {
         const result = taskQuerySchema.safeParse({ sortBy });
         expect(result.success).toBe(true);
       });
+    });
+
+    it("should accept empty string for status filter", () => {
+      const result = taskQuerySchema.safeParse({ status: "" });
+      expect(result.success).toBe(true);
+    });
+
+    it("should accept empty string for priority filter", () => {
+      const result = taskQuerySchema.safeParse({ priority: "" });
+      expect(result.success).toBe(true);
+    });
+
+    it("should accept empty string for projectId filter", () => {
+      const result = taskQuerySchema.safeParse({ projectId: "" });
+      expect(result.success).toBe(true);
+    });
+
+    it("should accept all empty string filters together", () => {
+      const result = taskQuerySchema.safeParse({ status: "", priority: "", projectId: "" });
+      expect(result.success).toBe(true);
     });
   });
 });
