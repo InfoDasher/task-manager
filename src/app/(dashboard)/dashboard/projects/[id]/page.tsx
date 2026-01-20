@@ -120,16 +120,23 @@ export default function ProjectDetailPage() {
 
   const deleteTaskMutation = useMutation({
     mutationFn: async (taskId: string) => {
-      setDeletingTaskId(taskId);
       const res = await fetch(`/api/tasks/${taskId}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete task");
       return res.json();
+    },
+    onMutate: (taskId: string) => {
+      // Set loading state immediately when mutation starts
+      setDeletingTaskId(taskId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project", projectId] });
       setDeletingTaskId(null);
     },
     onError: () => {
+      setDeletingTaskId(null);
+    },
+    onSettled: () => {
+      // Always clear the loading state when mutation completes
       setDeletingTaskId(null);
     },
   });
