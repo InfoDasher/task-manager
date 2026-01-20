@@ -4,17 +4,16 @@ import { execSync } from "child_process";
 // Get git info at build time
 function getGitInfo() {
   try {
-    const branch = execSync("git rev-parse --abbrev-ref HEAD").toString().trim();
-    const commit = execSync("git rev-parse HEAD").toString().trim();
-    const timestamp = execSync("git log -1 --format=%ci").toString().trim();
-    const author = execSync("git config user.name").toString().trim();
-    return { branch, commit, timestamp, author };
-  } catch {
+    const branch = execSync("git rev-parse --abbrev-ref HEAD", { encoding: "utf-8" }).trim();
+    const commit = execSync("git rev-parse --short HEAD", { encoding: "utf-8" }).trim();
+    const timestamp = execSync("git log -1 --format=%cI", { encoding: "utf-8" }).trim(); // ISO format
+    return { branch, commit, timestamp };
+  } catch (e) {
+    console.warn("Failed to get git info:", e);
     return {
-      branch: "unknown",
-      commit: "unknown",
+      branch: "main",
+      commit: "dev",
       timestamp: new Date().toISOString(),
-      author: "Unknown",
     };
   }
 }
@@ -29,7 +28,6 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_GIT_BRANCH: gitInfo.branch,
     NEXT_PUBLIC_GIT_COMMIT: gitInfo.commit,
     NEXT_PUBLIC_GIT_TIMESTAMP: gitInfo.timestamp,
-    NEXT_PUBLIC_GIT_AUTHOR: gitInfo.author,
   },
 };
 
