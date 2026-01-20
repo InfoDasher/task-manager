@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { TaskStatus, TaskPriority, ProjectStatus } from "@/types";
@@ -44,12 +44,25 @@ interface ProjectResponse {
 export default function ProjectDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const projectId = params.id as string;
 
+  // Read view mode from URL, default to "list"
+  const viewMode = (searchParams.get("view") as "list" | "kanban") || "list";
+
+  const setViewMode = (mode: "list" | "kanban") => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (mode === "list") {
+      params.delete("view"); // Clean URL for default view
+    } else {
+      params.set("view", mode);
+    }
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
+
   const [isEditing, setIsEditing] = useState(false);
   const [showNewTask, setShowNewTask] = useState(false);
-  const [viewMode, setViewMode] = useState<"list" | "kanban">("list");
   const [editName, setEditName] = useState("");
   const [editDescription, setEditDescription] = useState("");
   const [editStatus, setEditStatus] = useState("");
