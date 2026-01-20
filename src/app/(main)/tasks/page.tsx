@@ -332,13 +332,13 @@ function TasksContent() {
                     </Link>
                     <span className="text-xs text-muted-foreground bg-card px-2 py-0.5 rounded-full border border-card-border">{tasks.length}</span>
                   </div>
-                  <CardContent className="pt-3">
-                    <div className="space-y-2">
+                  <CardContent className="p-6">
+                    <div className="space-y-4">
                       {tasks.map((task) => (
                         <div
                           key={task.id}
                           onClick={() => setSelectedTaskId(task.id)}
-                          className="flex items-start justify-between p-3 rounded-lg border border-card-border border-l-4 border-l-primary hover:bg-accent hover:border-card-border-hover hover:border-l-primary transition-all cursor-pointer"
+                          className="flex items-start justify-between p-4 rounded-lg border border-card-border border-l-4 border-l-primary hover:bg-accent hover:border-card-border-hover hover:border-l-primary transition-all cursor-pointer"
                         >
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">

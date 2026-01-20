@@ -60,7 +60,7 @@ export function Navbar() {
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-6">
           <Link href="/tasks" className="flex items-center space-x-2">
-            <span className="text-xl font-bold bg-gradient-to-r from-[#5865f2] to-[#7c3aed] bg-clip-text text-transparent">TaskManager</span>
+            <span className="text-xl font-bold text-primary">TaskManager</span>
           </Link>
           <nav className="hidden md:flex items-center gap-5">
             {navLinks.map((link) => (

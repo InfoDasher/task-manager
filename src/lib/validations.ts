@@ -63,7 +63,18 @@ export const updateTaskSchema = z.object({
   description: z.string().max(1000).optional().nullable(),
   status: taskStatusEnum.optional(),
   priority: taskPriorityEnum.optional(),
-  dueDate: z.string().datetime().optional().nullable(),
+  dueDate: z
+    .string()
+    .optional()
+    .nullable()
+    .transform((val) => {
+      if (!val) return null;
+      // If it's already an ISO datetime, return as-is
+      if (val.includes("T")) return val;
+      // Otherwise, convert date-only to ISO datetime
+      return new Date(val).toISOString();
+    }),
+  projectId: z.string().cuid("Invalid project ID").optional(),
 });
 
 export const taskQuerySchema = z.object({

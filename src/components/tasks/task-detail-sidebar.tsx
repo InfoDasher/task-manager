@@ -43,6 +43,7 @@ export function TaskDetailSidebar({ taskId, onClose, onDeleted }: TaskDetailSide
   const [editStatus, setEditStatus] = useState("");
   const [editPriority, setEditPriority] = useState("");
   const [editDueDate, setEditDueDate] = useState("");
+  const [editProjectId, setEditProjectId] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const { data, isLoading, error } = useQuery({
@@ -57,13 +58,25 @@ export function TaskDetailSidebar({ taskId, onClose, onDeleted }: TaskDetailSide
 
   const task: Task | undefined = data?.data;
 
+  // Fetch all projects for the dropdown
+  const { data: projectsData } = useQuery({
+    queryKey: ["projects"],
+    queryFn: async () => {
+      const res = await fetch("/api/projects");
+      if (!res.ok) throw new Error("Failed to fetch projects");
+      return res.json();
+    },
+  });
+
+  const projects: { id: string; name: string }[] = projectsData?.data || [];
+
   // Reset editing state when task changes
   useEffect(() => {
     setIsEditing(false);
   }, [taskId]);
 
   const updateTaskMutation = useMutation({
-    mutationFn: async (updateData: { title?: string; description?: string; status?: string; priority?: string; dueDate?: string | null }) => {
+    mutationFn: async (updateData: { title?: string; description?: string; status?: string; priority?: string; dueDate?: string | null; projectId?: string }) => {
       const res = await fetch(`/api/tasks/${taskId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -75,6 +88,7 @@ export function TaskDetailSidebar({ taskId, onClose, onDeleted }: TaskDetailSide
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["task", taskId] });
       queryClient.invalidateQueries({ queryKey: ["all-tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
       setIsEditing(false);
     },
   });
@@ -99,6 +113,7 @@ export function TaskDetailSidebar({ taskId, onClose, onDeleted }: TaskDetailSide
       setEditStatus(task.status);
       setEditPriority(task.priority);
       setEditDueDate(task.dueDate ? task.dueDate.split("T")[0] : "");
+      setEditProjectId(task.project.id);
       setIsEditing(true);
     }
   };
@@ -110,6 +125,7 @@ export function TaskDetailSidebar({ taskId, onClose, onDeleted }: TaskDetailSide
       status: editStatus,
       priority: editPriority,
       dueDate: editDueDate || null,
+      projectId: editProjectId,
     });
   };
 
@@ -222,6 +238,10 @@ export function TaskDetailSidebar({ taskId, onClose, onDeleted }: TaskDetailSide
               <div className="space-y-2">
                 <label className="text-sm font-medium text-foreground">Due Date</label>
                 <Input type="date" value={editDueDate} onChange={(e) => setEditDueDate(e.target.value)} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">Project</label>
+                <Select value={editProjectId} onChange={(e) => setEditProjectId(e.target.value)} options={projects.map((p) => ({ value: p.id, label: p.name }))} />
               </div>
             </div>
           ) : (

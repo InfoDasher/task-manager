@@ -85,6 +85,21 @@ export async function PUT(request: Request, { params }: RouteParams) {
       });
     }
 
+    // If changing project, verify ownership of the new project
+    if (parsed.data.projectId && parsed.data.projectId !== existingTask.projectId) {
+      const newProject = await prisma.project.findFirst({
+        where: {
+          id: parsed.data.projectId,
+          userId: session.user.id,
+        },
+      });
+      if (!newProject) {
+        return NextResponse.json(errorResponse("Target project not found"), {
+          status: 404,
+        });
+      }
+    }
+
     const task = await prisma.task.update({
       where: { id },
       data: {
