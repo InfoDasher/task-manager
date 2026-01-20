@@ -69,6 +69,7 @@ export function Navbar() {
     { href: "/dashboard", label: "Dashboard" },
     { href: "/dashboard/projects", label: "Projects" },
     { href: "/dashboard/tasks", label: "Tasks" },
+    { href: "/dashboard/demo", label: "Demo" },
   ];
 
   return (
