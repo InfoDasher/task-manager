@@ -15,13 +15,13 @@ function getRelativeTime(dateString: string): string {
   if (diffMinutes < 60) return `${diffMinutes}m ago`;
   if (diffHours < 24) return `${diffHours}h ago`;
   if (diffDays < 7) return `${diffDays}d ago`;
-  
+
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
 export function Footer() {
   const [mounted, setMounted] = useState(false);
-  
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -30,7 +30,7 @@ export function Footer() {
   const branch = process.env.NEXT_PUBLIC_GIT_BRANCH || "main";
   const commit = process.env.NEXT_PUBLIC_GIT_COMMIT || "dev";
   const timestamp = process.env.NEXT_PUBLIC_GIT_TIMESTAMP || new Date().toISOString();
-  
+
   // Calculate relative time only on client to avoid hydration mismatch
   const relativeTime = mounted ? getRelativeTime(timestamp) : "";
 
